@@ -1,0 +1,490 @@
+<!<!DOCTYPE html>
+<html lang="en" class="scrollbar-hide">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskFlow | Productivity</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!- Fonts>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@400&display=swap" rel="stylesheet">
+
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='design-system.css') }}">--> 
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+
+  
+  
+  
+</head>
+
+<body class="bg-[#0B0F14] scrollbar-hide">
+
+  <header class="fixed top-0 left-0 w-full h-[72px] z-50 bg-[#0B0F14]/70 backdrop-blur-md border-b border-white/10">
+
+    <div class="max-w-none mx-auto h-full flex items-center justify-between px-6 md:px-10">
+  
+      <!-- Left -->
+      <div class="flex items-center gap-10">
+        <a href="/" class="flex items-center gap-2 text-white">
+          <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full">
+          <span class="font-semibold tracking-tight">TaskFlow</span>
+        </a>
+  
+        <nav class="hidden md:flex gap-10 text-sm">
+          <a href="/features" class="nav-link transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/features' else 'text-white/70' }}">
+            Features
+          </a>
+          <a href="/premium" class="nav-link transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/premium' else 'text-white/70' }}">
+            Premium
+          </a>
+          <a href="/pricing" class="nav-link transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/pricing' else 'text-white/70' }}">
+            Pricing
+          </a>
+          <a href="/about" class="nav-link transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/about' else 'text-white/70' }}">
+            About
+          </a>
+        </nav>
+      </div>
+  
+      <!-- Right -->
+      <div class="flex items-center gap-6">
+        <div class="hidden md:block h-6 w-px bg-white/20"></div>
+  
+        <div class="hidden md:flex gap-4">
+          <a href="/login" class="text-white/70 hover:text-white px-4 py-2 transition">
+            Log in
+          </a>
+          <a href="/register"
+             class="bg-white text-gray-900 px-4 py-2 rounded-md font-semibold hover:bg-white/90 transition">
+            Sign up
+          </a>
+        </div>
+  
+      </div>
+
+      <!-- Mobile Menu Button -->
+    <button id="menuOpen" class="md:hidden text-white text-2xl">
+      ☰
+    </button>
+
+  
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+<div id="mobileMenu"
+class="fixed inset-0 z-[60] bg-[#0B0F14] text-white translate-x-full transition-transform duration-300 ease-out">
+
+<!-- Top Bar -->
+<div class="h-[72px] flex items-center justify-between px-6 border-b border-white/10">
+  <a href="/" class="flex items-center gap-2 text-white">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full">
+    <span class="font-semibold tracking-tight">TaskFlow</span>
+  </a>
+
+<button id="menuClose" class="text-2xl">✕</button>
+</div>
+
+<!-- Menu Content -->
+<div class="px-6 py-8 flex flex-col gap-6 text-base">
+
+<a href="/features" class="transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/features' else 'text-white/80' }}">Features</a>
+<a href="/pricing" class="transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/pricing' else 'text-white/80' }}">Pricing</a>
+<a href="/blog" class="text-white/80 hover:text-white">Blog</a>
+
+<details class="group">
+ <summary class="cursor-pointer text-white/80 hover:text-white">
+   More
+ </summary>
+ <div class="mt-4 ml-4 flex flex-col gap-3 text-white/60">
+   <a href="/contact">Contact</a>
+   <a href="/about" class="transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/about' else '' }}">About</a>
+ </div>
+</details>
+
+<div class="mt-8 flex flex-col gap-4">
+ <a href="/register"
+    class="w-full text-center bg-white text-gray-900 py-3 rounded-md font-semibold">
+   Sign up
+ </a>
+ <a href="/login"
+    class="w-full text-center border border-white/20 py-3 rounded-md">
+   Log in
+ </a>
+</div>
+</div>
+</div>
+
+<!-- ================= PREMIUM HERO ================= -->
+<section class="w-full bg-[#0B0F14] text-white px-6 md:px-[64px] py-[160px]">
+
+  <div class="max-w-[960px] mx-auto text-center flex flex-col items-center gap-6">
+
+    <p class="text-sm font-medium text-white/50">
+      Premium
+    </p>
+
+    <h1 class="text-[44px] md:text-[56px] font-bold tracking-tight leading-[1.1]">
+      Upgrade to deeper focus
+    </h1>
+
+    <p class="text-base md:text-lg text-white/70 max-w-[720px]">
+      Premium unlocks advanced insights, smarter guidance, and tools designed
+      for people who take their time seriously.
+    </p>
+
+    <div class="flex items-center gap-4 mt-6">
+      <a
+        href="/register"
+        class="bg-white text-gray-900 px-6 py-3 rounded-md font-semibold hover:bg-white/90 transition"
+      >
+        Start Premium
+      </a>
+
+      <a
+        href="/pricing"
+        class="border border-white/20 px-6 py-3 rounded-md font-semibold hover:border-white/40 transition"
+      >
+        See pricing
+      </a>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= WHY PREMIUM ================= -->
+<section class="w-full bg-[#0B0F14] text-white px-6 md:px-[64px] py-[120px]">
+
+  <div class="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+
+    <div>
+      <h2 class="text-[36px] md:text-[44px] font-bold tracking-tight mb-6">
+        Less noise. More momentum.
+      </h2>
+
+      <p class="text-white/70 text-base md:text-lg mb-6">
+        Premium is built for builders, creators, and professionals who don’t want
+        to guess what matters next.
+      </p>
+
+      <ul class="space-y-4 text-white/80">
+        <li>✓ Advanced habit and productivity insights</li>
+        <li>✓ AI that adapts to how you actually work</li>
+        <li>✓ Reflection tools that reveal patterns over time</li>
+        <li>✓ Custom templates for repeatable success</li>
+      </ul>
+    </div>
+
+    <!-- Visual Placeholder -->
+    <div class="rounded-lg border border-white/10 bg-white/5 h-[320px] flex items-center justify-center text-white/40">
+      Premium product preview
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= WHAT YOU UNLOCK ================= -->
+<section class="w-full bg-[#0B0F14] text-white px-6 md:px-[64px] py-[120px]">
+
+  <div class="max-w-[1100px] mx-auto text-center mb-16">
+    <p class="text-sm text-white/50 mb-3">
+      What’s included
+    </p>
+    <h2 class="text-[36px] md:text-[44px] font-bold tracking-tight">
+      Premium gives you leverage
+    </h2>
+  </div>
+
+  <div class="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <div class="border border-white/15 rounded-md p-8">
+      <h3 class="font-semibold mb-3">Advanced insights</h3>
+      <p class="text-white/70 text-sm">
+        See patterns in your habits, focus, and follow-through over time.
+      </p>
+    </div>
+
+    <div class="border border-white/15 rounded-md p-8">
+      <h3 class="font-semibold mb-3">Smarter AI guidance</h3>
+      <p class="text-white/70 text-sm">
+        The AI adapts based on your behavior, not generic rules.
+      </p>
+    </div>
+
+    <div class="border border-white/15 rounded-md p-8">
+      <h3 class="font-semibold mb-3">Custom workflows</h3>
+      <p class="text-white/70 text-sm">
+        Build templates that match how you think and work.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+<!-- FREE VS PREMIUM -->
+<section class="bg-[#0B0F14] text-white px-6 md:px-[64px] py-[120px]">
+  <div class="max-w-[1000px] mx-auto grid md:grid-cols-2 gap-12">
+
+    <!-- FREE -->
+    <div class="border border-white/10 rounded-lg p-8">
+      <h3 class="text-xl font-semibold mb-4">Free gets you started</h3>
+      <ul class="space-y-3 text-white/70">
+        <li>✓ Plan your day</li>
+        <li>✓ Track basic habits</li>
+        <li>✓ See what’s next</li>
+      </ul>
+      <p class="mt-6 text-sm text-white/50">
+        Great for organizing tasks.
+      </p>
+    </div>
+
+    <!-- PREMIUM -->
+    <div class="border border-white/30 rounded-lg p-8 bg-white/[0.03]">
+      <h3 class="text-xl font-semibold mb-4">Premium builds momentum</h3>
+      <ul class="space-y-3">
+        <li>✓ See patterns across weeks & months</li>
+        <li>✓ AI adapts to *how you actually work*</li>
+        <li>✓ Reflect, adjust, and improve continuously</li>
+        <li>✓ Templates that scale your best days</li>
+      </ul>
+      <p class="mt-6 text-sm text-white/70">
+        Built for people serious about progress.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHY PREMIUM WORKS -->
+<section class="bg-[#0B0F14] text-white px-6 md:px-[64px] py-[120px]">
+  <div class="max-w-[960px] mx-auto space-y-16">
+
+    <div class="text-center space-y-4">
+      <h2 class="text-[36px] md:text-[44px] font-bold tracking-tight">
+        Premium changes how you think about your day
+      </h2>
+      <p class="text-white/70 text-lg">
+        You don’t just complete tasks — you learn from them.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+      <div class="space-y-3">
+        <h4 class="font-semibold text-lg">Clarity over time</h4>
+        <p class="text-white/70">
+          Spot trends in focus, habits, and follow-through so you know what actually works.
+        </p>
+      </div>
+
+      <div class="space-y-3">
+        <h4 class="font-semibold text-lg">Smarter guidance</h4>
+        <p class="text-white/70">
+          TaskFlow’s AI adapts based on your behavior — not generic productivity rules.
+        </p>
+      </div>
+
+      <div class="space-y-3">
+        <h4 class="font-semibold text-lg">Repeatable wins</h4>
+        <p class="text-white/70">
+          Turn your best days into templates you can reuse anytime.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CURIOSITY BLOCK -->
+<section class="bg-[#0B0F14] text-white px-6 md:px-[64px] py-[120px]">
+  <div class="max-w-[720px] mx-auto text-center space-y-6">
+
+    <h3 class="text-2xl font-semibold">
+      Most users upgrade after one realization
+    </h3>
+
+    <p class="text-white/70 text-lg">
+      “I wasn’t unproductive — I just couldn’t see what mattered most.”
+    </p>
+
+    <p class="text-white/50 text-sm">
+      Premium shows you the patterns hiding in your daily work.
+    </p>
+
+  </div>
+</section>
+
+
+
+
+<!-- FINAL CTA -->
+<section class="bg-[#0B0F14] text-white px-6 md:px-[64px] py-[140px]">
+  <div class="max-w-[720px] mx-auto text-center space-y-6">
+
+    <h2 class="text-[36px] md:text-[44px] font-bold tracking-tight">
+      Try it. Feel the difference.
+    </h2>
+
+    <p class="text-white/70 text-lg">
+      Start free. Upgrade when the insight clicks.
+      No contracts. No pressure.
+    </p>
+
+    <div class="flex justify-center gap-4">
+      <a href="/register" class="bg-white text-gray-900 px-6 py-3 rounded-md font-semibold">
+        Start Premium
+      </a>
+      <a href="/features" class="border border-white/20 px-6 py-3 rounded-md font-semibold">
+        Explore features
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<footer class="bg-[#0B0F14] border-t border-white/10 px-6 md:px-[64px] py-20 text-white">
+  <div class="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+
+    <!-- Brand / Contact -->
+    <div class="flex flex-col gap-4">
+      <div class="flex items-center gap-2">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full">
+        <span class="font-semibold">TaskFlow</span>
+      </div>
+
+      <p class="text-white/60 text-sm max-w-xs">
+        One workspace for clarity, focus, and momentum.
+      </p>
+
+      <div class="text-white/50 text-sm space-y-2 mt-4">
+        <p>500 N Akard St<br>Dallas, TX 75201</p>
+        <p>1 (844) 827-5435</p>
+        <p>
+          <a href="mailto:hello@taskflowhq.com" class="hover:text-white transition">
+            hello@taskflowhq.com
+          </a>
+        </p>
+      </div>
+
+      <!-- Socials -->
+      <div class="flex items-center gap-4 mt-4 text-white/50">
+        <!-- Facebook -->
+  <a href="#" aria-label="Facebook" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-3h2.4V9.5c0-2.4 1.4-3.7 3.6-3.7
+               1 0 2 .2 2 .2v2.3h-1.1c-1.1 0-1.4.7-1.4 1.4V12H16l-.4 3h-2.5v7A10
+               10 0 0 0 22 12z"/>
+    </svg>
+  </a>
+
+  <!-- Instagram -->
+  <a href="#" aria-label="Instagram" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2
+               5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3
+               3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5
+               3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0
+               2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4.5-.9a1.1
+               1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2z"/>
+    </svg>
+  </a>
+
+  <!-- X / Twitter -->
+  <a href="#" aria-label="X" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.3 2H21l-6.6 7.6L22 22h-6.6l-5.2-6.8L4.6 22H2l7.1-8.2
+               L2 2h6.8l4.7 6.2L18.3 2zm-2.3 18h1.5L8.2
+               4H6.6l9.4 16z"/>
+    </svg>
+  </a>
+
+  <!-- LinkedIn -->
+  <a href="#" aria-label="LinkedIn" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M4.98 3.5A2.5 2.5 0 1 0 5 8a2.5 2.5
+               0 0 0-.02-4.5zM3 9h4v12H3V9zm7
+               0h3.8v1.6h.1c.5-.9 1.7-1.8
+               3.6-1.8 3.9 0 4.6 2.5
+               4.6 5.8V21h-4v-5.3c0-1.3
+               0-3-1.9-3s-2.2 1.4-2.2
+               2.9V21h-4V9z"/>
+    </svg>
+  </a>
+      </div>
+    </div>
+
+    <!-- Product -->
+    <div>
+      <p class="font-semibold mb-4">Product</p>
+      <ul class="space-y-3 text-white/60 text-sm">
+        <li><a href="/features" class="hover:text-white transition">Features</a></li>
+        <li><a href="/pricing" class="hover:text-white transition">Pricing</a></li>
+        <li><a href="/premium" class="hover:text-white transition">Premium</a></li>
+      </ul>
+    </div>
+
+    <!-- Company -->
+    <div>
+      <p class="font-semibold mb-4">Company</p>
+      <ul class="space-y-3 text-white/60 text-sm">
+        <li><a href="/about" class="hover:text-white transition">About</a></li>
+        <li><a href="/blog" class="hover:text-white transition">Blog</a></li>
+        <li><a href="/contact" class="hover:text-white transition">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Legal -->
+    <div>
+      <p class="font-semibold mb-4">Legal</p>
+      <ul class="space-y-3 text-white/60 text-sm">
+        <li><a href="/privacy" class="hover:text-white transition">Privacy Policy</a></li>
+        <li><a href="/terms" class="hover:text-white transition">Terms of Service</a></li>
+        <li><a href="/cookie" class="hover:text-white transition">Cookies Settings</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="max-w-[1280px] mx-auto mt-16 pt-8 border-t border-white/10
+              flex flex-col md:flex-row justify-between items-center
+              text-white/40 text-sm gap-4">
+    <span>© 2025 TaskFlow. All rights reserved.</span>
+
+    <div class="flex items-center gap-6">
+      <a href="/privacy" class="hover:text-white">Privacy Policy</a>
+      <a href="/terms" class="hover:text-white">Terms of Service</a>
+      <a href="/cookie" class="hover:text-white">Cookies Settings</a>
+    </div>
+  </div>
+</footer>
+
+
+    <!-- ================= SCRIPTS ================= -->
+    <script>
+      const menuBtn = document.getElementById("menuBtn");
+      const overlay = document.getElementById("mobileOverlay");
+      const backdrop = document.getElementById("backdrop");
+      const body = document.body;
+    
+      menuBtn.addEventListener("click", () => {
+        overlay.classList.remove("hidden");
+        body.classList.add("overflow-hidden");
+      });
+    
+      backdrop.addEventListener("click", () => {
+        overlay.classList.add("hidden");
+        body.classList.remove("overflow-hidden");
+      });
+    </script>
+   
+  
+
+</body>
+</html>

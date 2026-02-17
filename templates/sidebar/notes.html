@@ -1,0 +1,999 @@
+{% extends "base.html" %}
+{% block title %}Notes • TaskFlow{% endblock %}
+
+{% block content %}
+
+{% set list_back_url = '/notes?list=1' %}
+{% if notes_view == 'root' %}
+  {% set list_back_url = '/notes?view=root&list=1' %}
+{% elif notes_view == 'folder' and active_folder_id %}
+  {% set list_back_url = '/notes?folder_id=' ~ active_folder_id ~ '&list=1' %}
+{% endif %}
+
+<div id="notesLayout"
+data-active-folder-id="{{ active_folder_id or '' }}"
+data-notes-view="{{ notes_view }}"
+{% if force_mobile_page %}
+data-force-mobile-page="{{ force_mobile_page }}"
+{% elif request.args.get('folders') == '1' %}
+data-force-mobile-page="folders"
+{% endif %}
+data-mobile-page="folders"
+class="relative grid h-full min-h-0 overflow-hidden box-border gap-2 p-2 grid-cols-[12rem_14rem_minmax(0,1fr)_0] bg-[#1a1a1a] transition-[grid-template-columns] duration-300">
+
+<!-- LEFT: FOLDERS -->
+<aside id="notesSidebar"
+class="notes-mobile-page relative h-full min-h-0 rounded-xl pb-3 overflow-y-auto tf-scroll bg-[#1C1C1C] transition-all duration-200">
+
+<!-- Mobile header -->
+<div class="notes-mobile-header px-3 pt-4">
+  <div>
+    <p class="notes-mobile-title">Folders</p>
+    <p class="notes-mobile-subtitle">{{ all_notes_count or 0 }} Notes</p>
+  </div>
+  <div class="notes-mobile-actions">
+    <button
+      onclick="openCreateFolderModal()"
+      class="notes-mobile-icon"
+      title="New Folder"
+      aria-label="New Folder"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="w-5 h-5">
+        <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <path d="M12 11v4"/>
+        <path d="M10 13h4"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- Top controls -->
+<div class="notes-desktop-controls flex items-center justify-end mb-4 px-3 pt-3 gap-2">
+
+<!-- New Folder -->
+<button id="newFolderBtn"
+class="hidden md:inline-flex p-1.5 rounded-md
+text-zinc-400 hover:text-white
+hover:bg-white/5 transition"
+title="New Folder">
+
+<!-- Folder + -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round"
+class="w-5 h-5">
+<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+<path d="M12 11v4"/>
+<path d="M10 13h4"/>
+</svg>
+</button>
+      
+<!-- Collapse -->
+<button
+onclick="toggleNotesSidebar()"
+class="hidden md:inline-flex p-1.5 rounded-md
+text-zinc-400 hover:text-white
+hover:bg-white/5 transition"
+title="Collapse Sidebar">
+
+<!-- Sidebar icon -->
+<svg xmlns="http://www.w3.org/2000/svg"
+viewBox="0 0 24 24" fill="none"
+stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+class="w-5 h-5">
+<rect x="3" y="4" width="18" height="16" rx="2"/>
+<path d="M9 4v16"/>
+</svg>
+
+</button>
+</div>
+      
+
+    <!-- Sections -->
+    <ul class="space-y-1 text-sm px-3">
+  <!-- All Notes -->
+  <li
+  onclick="navigateNotesMobile(event, 'list', '/notes')"
+  class="flex items-center gap-2 px-2 py-1 rounded-md
+         {% if notes_view == 'all' %}
+           bg-white/10 text-white font-medium
+         {% else %}
+           text-zinc-400 hover:text-white hover:bg-white/5
+         {% endif %}
+         cursor-pointer"
+>
+
+
+    <!-- Folder icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round"
+      class="w-4 h-4">
+      <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
+      <path d="M2 10h20"/>
+    </svg>
+    <span>All Notes</span>
+    <span class="ml-auto text-xs text-zinc-500">
+      {{ all_notes_count or 0 }}
+    </span>
+  </li>
+
+  <!-- Notes -->
+  <li
+  onclick="navigateNotesMobile(event, 'list', '/notes?view=root')"
+  class="flex items-center gap-2 px-2 py-1 rounded-md
+         {% if notes_view == 'root' %}
+           bg-white/10 text-white font-medium
+         {% else %}
+           text-zinc-400 hover:text-white hover:bg-white/5
+         {% endif %}
+         cursor-pointer"
+>
+
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="w-4 h-4">
+        <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
+        <path d="M2 10h20"/>
+      </svg>
+  
+      <span>Notes</span>
+      <span class="ml-auto text-xs text-zinc-500">
+        {{ root_notes_count or 0 }}
+      </span>
+  </li>
+  
+    
+  <button
+  onclick="toggleFoldersChevron()"
+  class="mt-4 px-2 w-full flex items-center justify-between
+         text-xs uppercase tracking-widest
+         text-zinc-500 hover:text-white transition"
+>
+  <span>Folders</span>
+
+  <!-- Chevron -->
+  <svg
+    id="foldersChevron"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="w-4 h-4 text-zinc-400 transition-transform duration-200"
+  >
+    <path d="m6 9 6 6 6-6"/>
+  </svg>
+</button>
+
+
+  
+<div
+  id="foldersList"
+  class="mt-1 space-y-1
+         overflow-hidden
+         transition-[max-height,opacity,transform]
+         duration-300 ease-out
+         max-h-96 opacity-100 translate-y-0"
+>
+
+{% for folder in active_folders %}
+<li
+  data-folder-id="{{ folder.id }}"
+  oncontextmenu="openFolderContextMenu(event, '{{ folder.id }}')"
+  onclick="navigateNotesMobile(event, 'list', '/notes?folder_id={{ folder.id }}')"
+  {% if folder.color %}
+    {% if folder.color %}style="background-color: {{ folder.color }};"{% endif %}
+  {% endif %}
+  class="group flex items-center px-2 py-1 rounded-md cursor-pointer
+       {% if notes_view == 'folder' and folder.id == active_folder_id %}
+         bg-white/10 text-white font-medium ring-1 ring-white/10
+       {% else %}
+         text-zinc-400 hover:text-white hover:bg-white/5
+       {% endif %}"
+
+>
+
+
+<!-- LEFT: icon + name -->
+<div class="flex items-center gap-2 min-w-0">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+    fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round"
+    class="w-4 h-4 shrink-0">
+    <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
+    <path d="M2 10h20"/>
+  </svg>
+
+  <span
+  class="truncate"
+  data-folder-name="{{ folder.name }}"
+  data-folder-id="{{ folder.id }}"
+>
+  {{ folder.name }}
+</span>
+
+</div>
+
+<!-- 🔢 NOTE COUNT (ADD THIS HERE) -->
+<span
+  class="ml-auto text-xs text-zinc-500"
+  data-folder-count="{{ folder.id }}"
+>
+  {{ (folder_counts or {}).get(folder.id, 0) }}
+</span>
+
+
+<!-- RIGHT: ellipsis (hover only) -->
+<button
+  onclick="openFolderOptions(event, '{{ folder.id }}')"
+  class="ml-auto hidden group-hover:flex
+         items-center justify-center
+         p-1 rounded-md
+         text-zinc-400 hover:text-white
+         hover:bg-white/10 transition"
+  title="Folder options"
+>
+  <svg xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="w-4 h-4">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M17 12h.01"/>
+    <path d="M12 12h.01"/>
+    <path d="M7 12h.01"/>
+  </svg>
+</button>
+
+
+  {% else %}
+  <p class="px-2 text-xs text-zinc-500 mt-2">
+    No folders yet
+  </p>
+  {% endfor %}
+</div>
+
+    <!-- Recently Deleted -->
+    <li
+    id="recentlyDeletedLink"
+    onclick="location.href='/notes/recently-deleted'"
+    class="mt-6 px-2 py-1 rounded-md cursor-pointer
+           flex items-center gap-2
+           text-red-400 hover:bg-red-500/10 transition"
+  >
+  
+    <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="w-4 h-4">
+
+    <path d="M10 11v6"/>
+    <path d="M14 11v6"/>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+    <path d="M3 6h18"/>
+    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+    </svg>
+
+  <span class="truncate">Recently Deleted</span>
+  <span class="ml-auto text-xs text-zinc-500">
+    {{ deleted_notes_count or 0 }}
+  </span>
+</li>
+
+    </ul>
+  </aside>
+
+<!-- CREATE FOLDER MODAL -->
+<div
+  id="createFolderModal"
+  class="modal fixed inset-0 z-50 hidden items-center justify-center bg-black/60"
+>
+  <div class=" modal-content w-full max-w-sm rounded-xl bg-[#1C1C1C] p-5 shadow-xl">
+    <h3 class="text-sm font-semibold text-white mb-3">
+      Create Folder
+    </h3>
+
+    <form method="POST" action="/notes/folders/create" class="space-y-4">
+      <input type="hidden" name="parent_id" id="createFolderParentId" />
+    
+      <input
+        type="text"
+        name="name"
+        placeholder="Folder name"
+        required
+        autofocus
+        class="w-full rounded-md bg-[#111] px-3 py-2
+               text-sm text-white placeholder-zinc-500
+               outline-none border border-white/10
+               focus:border-white/20"
+      />
+    
+
+      <div class="flex justify-end gap-2">
+        <button
+          type="button"
+          data-close-modal
+          class="px-3 py-1.5 rounded-md text-sm
+                 text-zinc-400 hover:text-white
+                 hover:bg-white/5 transition"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="px-3 py-1.5 rounded-md text-sm
+                 bg-white text-black
+                 hover:bg-zinc-200 transition"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- FOLDER COLOR MODAL -->
+<div
+  id="folderColorModal"
+  class="modal fixed inset-0 z-50 hidden items-center justify-center bg-black/60"
+>
+  <div class="modal-content w-full max-w-xs rounded-xl bg-[#1C1C1C] p-4 shadow-xl">
+    <h3 class="text-sm font-semibold text-white mb-3">
+      Folder color
+    </h3>
+
+    <!-- Preset colors -->
+    <div
+      id="folderColorPickerModal"
+      class="grid grid-cols-6 gap-2 mb-4"
+    ></div>
+
+    <!-- Custom color wheel -->
+    <div class="mt-3 pt-3 border-t border-white/10">
+      <label class="text-xs text-zinc-400 mb-2 block">
+        Custom color
+      </label>
+
+      <input
+        id="folderColorWheel"
+        type="color"
+        class="w-full h-10 rounded-md bg-transparent cursor-pointer"
+      />
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-end mt-4">
+      <button
+        data-close-modal
+        class="px-3 py-1.5 text-sm rounded-md
+               text-zinc-400 hover:text-white
+               hover:bg-white/5 transition"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- MIDDLE: NOTES LIST -->
+<section id="notesListPane" class="notes-mobile-page h-full min-h-0 border-r border-white/10 m-2 md:m-3 px-0 py-2 md:px-4 md:py-3 overflow-y-auto tf-scroll">
+
+  <!-- Mobile header -->
+  <div class="notes-mobile-header mb-4 px-4 pt-2 md:px-0 md:pt-0">
+    <button
+      onclick="navigateNotesMobile(event, 'folders', '/notes')"
+      class="notes-mobile-back"
+      style="width:2rem;height:2rem;"
+      aria-label="Back to folders"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"
+        class="w-4 h-4">
+        <path d="m15 18-6-6 6-6"/>
+      </svg>
+    </button>
+    <div class="notes-mobile-title-block">
+      <p class="notes-mobile-title" style="font-size:1rem;line-height:1.2;">
+        {% if notes_view == "folder" and active_folder %}
+          {{ active_folder.name }}
+        {% elif notes_view == "root" %}
+          Notes
+        {% else %}
+          All Notes
+        {% endif %}
+      </p>
+      <p class="notes-mobile-subtitle" style="font-size:0.6rem;letter-spacing:0.12em;">
+        {{ notes|length }} Notes
+      </p>
+    </div>
+    <button
+      onclick="createNewNote()"
+      class="notes-mobile-icon"
+      style="width:2rem;height:2rem;"
+      aria-label="New note"
+      title="New Note"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="w-4 h-4">
+        <path d="M12 5v14"/>
+        <path d="M5 12h14"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Header -->
+<div class="notes-desktop-header hidden md:flex items-center justify-between mb-3">
+
+
+  <!-- LEFT GROUP: collapse + title -->
+  <div class="flex items-center gap-2">
+    <button
+      id="notesExpandBtn"
+      onclick="toggleNotesSidebar()"
+      class="p-1.5 rounded-md
+             text-zinc-400 hover:text-white
+             hover:bg-white/5 transition"
+      title="Expand Sidebar"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="w-5 h-5">
+        <rect x="3" y="4" width="18" height="16" rx="2"/>
+        <path d="M9 4v16"/>
+      </svg>
+    </button>
+
+    <h2 class="text-xs uppercase tracking-widest text-zinc-500 truncate max-w-[8rem]">
+      {% if notes_view == "folder" and active_folder %}
+        {{ active_folder.name }}
+      {% elif notes_view == "root" %}
+        Notes
+      {% else %}
+        All Notes
+      {% endif %}
+    </h2>
+  </div>
+
+  <!-- RIGHT: + button -->
+  <button
+    onclick="createNewNote()"
+    class="p-1.5 rounded-md
+           text-zinc-400 hover:text-white
+           hover:bg-white/5 transition"
+    title="New Note"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="w-4 h-4">
+      <path d="M12 5v14"/>
+      <path d="M5 12h14"/>
+    </svg>
+  </button>
+
+</div>
+
+  <!-- Notes list -->
+  <div id="notesList" class="space-y-3 md:space-y-6 px-4 md:px-0 pb-2 md:pb-0">
+    {% if notes_grouped %}
+      {% for group in notes_grouped %}
+        <div class="notes-group">
+          <h3 class="notes-group-title" style="font-size:0.55rem;letter-spacing:0.12em;margin-bottom:0.35rem;">
+            {{ group.label }}
+          </h3>
+          <div class="space-y-1.5 md:space-y-2">
+            {% for note in group.notes %}
+              {% if note.title or note.content %}
+              <div
+                data-note-id="{{ note.id }}"
+                data-notes-target="note"
+                class="note-card p-2 md:p-3 rounded-md md:rounded-lg cursor-pointer transition-all duration-300
+                ease-[cubic-bezier(0.2,0,0,1)] border-b border-white/5 relative
+                {% if active_note and note.id == active_note.id %}
+                  bg-white/10 border-white/30 ring-1 ring-white/10
+                {% else %}
+                  bg-transparent hover:bg-white/5
+                {% endif %}"
+                onclick="navigateNotesMobile(event, 'note', '/notes/{{ note.id }}?folder_id={{ note.folder_id }}')"
+                oncontextmenu="openNoteContextMenu(event, '{{ note.id }}')"
+              >
+                <p class="note-title text-[0.82rem] md:text-sm font-medium text-white truncate">
+                  {{ note.title or "Untitled" }}
+                </p>
+                <p class="note-time text-[0.65rem] md:text-xs text-zinc-400 mt-0.5 md:mt-1">
+                  {{ note.updated_at|note_timestamp }}
+                </p>
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    {% elif not active_note %}
+      <p class="text-sm text-zinc-500">
+        No notes yet
+      </p>
+    {% endif %}
+  </div>
+
+</section>
+
+
+  <!-- RIGHT: NOTE EDITOR -->
+  <main id="notesEditorPane" class="notes-mobile-page flex h-full min-h-0 flex-col px-6 py-6 overflow-y-auto tf-scroll">
+    <div class="notes-mobile-header mb-4">
+      <button
+        onclick="navigateNotesMobile(event, 'list', '{{ list_back_url }}')"
+        class="notes-mobile-back notes-mobile-back--label"
+        aria-label="Back to notes list"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          class="w-5 h-5">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+        <span class="notes-mobile-back-text">Back</span>
+      </button>
+      <!-- Removed mobile note title/time block -->
+      <div class="notes-mobile-actions">
+        <button
+          class="notes-mobile-icon"
+          title="More"
+          aria-label="More"
+          type="button"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            class="w-5 h-5">
+            <circle cx="12" cy="12" r="1"/>
+            <circle cx="19" cy="12" r="1"/>
+            <circle cx="5" cy="12" r="1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    {% if active_note %}
+    <input
+      id="noteTitle"
+      data-note-id="{{ active_note.id }}"
+      value="{{ active_note.title or '' }}"
+      placeholder="Untitled"
+      class="w-full bg-transparent text-lg font-semibold
+             text-white outline-none mb-3"
+      autofocus
+    />
+  
+    <div
+      id="noteContent"
+      contenteditable="true"
+      data-placeholder="Start writing…"
+      class="w-full h-full bg-transparent
+             text-zinc-300 outline-none"
+    >{% if active_note.content %}{{ active_note.content|safe }}{% endif %}</div>
+  {% endif %}
+
+  </main>
+
+<!-- RIGHT: INSPECTOR PANEL -->
+<aside
+  id="noteInspector"
+  class="h-full min-h-0 overflow-y-auto tf-scroll
+         bg-[#1C1C1C] rounded-xl
+         border-l border-white/10
+         transition-all duration-300 ease-out
+         translate-x-full"
+>
+
+  <div class="p-4 space-y-4">
+    <div class="flex items-center justify-between">
+      <h3 class="text-xs uppercase tracking-widest text-zinc-500">
+        Text Settings
+      </h3>
+
+      <button
+        id="inspectorPinBtn"
+        type="button"
+        aria-pressed="false"
+        title="Pin inspector"
+        class="p-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-white/5 transition"
+      >
+        <svg
+          data-pin="off"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-5 h-5"
+        >
+          <circle cx="12" cy="16" r="1"/>
+          <rect width="18" height="12" x="3" y="10" rx="2"/>
+          <path d="M7 10V7a5 5 0 0 1 9.33-2.5"/>
+        </svg>
+        <svg
+          data-pin="on"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4 hidden"
+        >
+          <circle cx="12" cy="16" r="1"/>
+          <rect x="3" y="10" width="18" height="12" rx="2"/>
+          <path d="M7 10V7a5 5 0 0 1 10 0v3"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button
+        id="inspectorBoldBtn"
+        type="button"
+        class="inspector-style-btn"
+        title="Bold"
+        onclick="toggleBold()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4"
+        >
+          <path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/>
+        </svg>
+      </button>
+      <button
+        id="inspectorItalicBtn"
+        type="button"
+        class="inspector-style-btn"
+        title="Italic"
+        onclick="toggleItalic()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4"
+        >
+          <line x1="19" x2="10" y1="4" y2="4"/>
+          <line x1="14" x2="5" y1="20" y2="20"/>
+          <line x1="15" x2="9" y1="4" y2="20"/>
+        </svg>
+      </button>
+      <button
+        id="inspectorUnderlineBtn"
+        type="button"
+        class="inspector-style-btn"
+        title="Underline"
+        onclick="toggleUnderline()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4"
+        >
+          <path d="M6 4v6a6 6 0 0 0 12 0V4"/>
+          <line x1="4" x2="20" y1="20" y2="20"/>
+        </svg>
+      </button>
+      <button
+        id="inspectorStrikethroughBtn"
+        type="button"
+        class="inspector-style-btn"
+        title="Strikethrough"
+        onclick="toggleStrikethrough()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4"
+        >
+          <path d="M16 4H9a3 3 0 0 0-2.83 4"/>
+          <path d="M14 12a4 4 0 0 1 0 8H6"/>
+          <line x1="4" x2="20" y1="12" y2="12"/>
+        </svg>
+      </button>
+      <button
+        id="inspectorBaselineBtn"
+        type="button"
+        class="inspector-style-btn"
+        title="Baseline"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4"
+        >
+          <path d="M4 20h16"/>
+          <path d="m6 16 6-12 6 12"/>
+          <path d="M8 12h8"/>
+        </svg>
+      </button>
+      <button
+        id="inspectorHighlighterBtn"
+        type="button"
+        class="inspector-style-btn"
+        title="Highlighter"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-4 h-4"
+        >
+          <path d="m9 11-6 6v3h9l3-3"/>
+          <path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Font Size -->
+    <div class="font-size-control">
+      <div class="flex items-center justify-between">
+        <label class="text-xs text-zinc-400">Font Size</label>
+        <span id="editorFontSizeValue" class="text-xs text-zinc-500">16px</span>
+      </div>
+      <div class="font-size-slider">
+        <input
+          type="range"
+          id="editorFontSize"
+          min="8"
+          max="48"
+          step="1"
+          value="16"
+          class="w-full"
+        />
+      </div>
+    </div>
+
+    <!-- Font Style -->
+    <div class="flex gap-2">
+      <button onclick="toggleBold()" class="btn">B</button>
+      <button onclick="toggleItalic()" class="btn italic">I</button>
+    </div>
+
+    <!-- Line Height -->
+    <div>
+      <label class="text-xs text-zinc-400">Line Height</label>
+      <input
+        type="range"
+        min="1.2"
+        max="2"
+        step="0.1"
+        value="1.6"
+        class="w-full"
+        oninput="setEditorLineHeight(this.value)"
+      />
+    </div>
+  </div>
+</aside>
+
+
+</div>
+
+<!-- FOLDER OPTIONS MODAL -->
+<div
+  id="folderOptionsModal"
+  class="modal hidden fixed inset-0 z-50"
+>
+  <div
+    class="modal-content absolute w-48 rounded-lg
+           bg-[#1C1C1C] shadow-xl
+           border border-white/10
+           text-sm"
+    style="top: 0; left: 0;"
+  >
+    <button
+      onclick="startInlineRename()"
+      class="w-full px-4 py-2 text-left hover:bg-white/5"
+    >
+      Rename folder
+    </button>
+
+    <button
+      onclick="openFolderColorModal()"
+      class="w-full px-4 py-2 text-left hover:bg-white/5"
+    >
+      Change color
+    </button>
+
+      <button
+      onclick="createSubfolder()"
+      class="w-full px-4 py-2 text-left hover:bg-white/5"
+    >
+      New folder
+    </button>
+  
+      <div class="border-t border-white/10 my-1"></div>
+  
+      <button
+      onclick="deleteFolder()"
+      class="w-full px-4 py-2 text-left text-red-400 hover:bg-red-500/10"
+    >
+      Delete folder
+    </button>
+
+    <!-- COLOR PICKER -->
+    <div
+      id="folderColorPicker"
+      class="hidden px-3 py-2 grid grid-cols-6 gap-2"
+    >
+      <!-- colors injected by JS -->
+    </div>
+
+  </div>
+</div>
+
+<!-- NOTE CONTEXT MENU -->
+<div
+  id="noteContextMenu"
+  class="fixed z-50 hidden
+         w-44 rounded-lg
+         bg-[#1C1C1C]
+         border border-white/10
+         shadow-xl
+         text-sm"
+>
+  <button
+    onclick="contextCreateNote()"
+    class="w-full px-4 py-2 text-left hover:bg-white/5"
+  >
+    New Note
+  </button>
+
+  <div class="border-t border-white/10 my-1"></div>
+
+  <button
+    onclick="contextDeleteNote()"
+    class="w-full px-4 py-2 text-left text-red-400 hover:bg-red-500/10"
+  >
+    Delete Note
+  </button>
+</div>
+
+<!-- RECENTLY DELETED CONTEXT MENU -->
+<div
+  id="recentlyDeletedContextMenu"
+  class="fixed z-50 hidden
+         w-44 rounded-lg
+         bg-[#1C1C1C]
+         border border-white/10
+         shadow-xl
+         text-sm"
+>
+  <button
+    id="deleteAllTrigger"
+    class="w-full px-4 py-2 text-left text-red-400 hover:bg-red-500/10"
+  >
+    Delete All
+  </button>
+</div>
+
+<!-- DELETE ALL CONFIRMATION MODAL -->
+<div
+  id="deleteAllModal"
+  class="modal fixed inset-0 z-50 hidden items-center justify-center bg-black/60"
+>
+  <div class="modal-content w-full max-w-sm rounded-xl bg-[#1C1C1C] p-5 shadow-xl">
+    <h3 class="text-sm font-semibold text-white mb-2">
+      Delete All Notes?
+    </h3>
+    <p class="text-sm text-zinc-400 mb-5">
+      All notes in Recently Deleted will be permanently removed and cannot be recovered.
+    </p>
+    <div class="flex justify-end gap-2">
+      <button
+        type="button"
+        data-cancel-delete-all
+        class="px-3 py-1.5 rounded-md text-sm
+               text-zinc-400 hover:text-white
+               hover:bg-white/5 transition"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        data-confirm-delete-all
+        class="px-3 py-1.5 rounded-md text-sm
+               bg-red-500 text-white
+               hover:bg-red-600 transition"
+      >
+        Delete All
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT EDGE HOVER ZONE -->
+<div
+  id="inspectorEdgeHover"
+  class="fixed top-0 right-0 h-full z-40"
+  style="width: 14px;"
+></div>
+
+
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='js/notes/folders.js') }}"></script>
+<script src="{{ url_for('static', filename='js/notes/notes.js') }}"></script>
+<script src="{{ url_for('static', filename='js/notes/recently-deleted.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/core/theme.js') }}"></script>
+  <script type="module" src="{{ url_for('static', filename='js/ui/color-picker.js') }}"></script>
+{% endblock %}
+
+{% endblock %}

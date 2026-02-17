@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}Tasks • TaskFlow{% endblock %}
+
+{% block content %}
+
+{# ================= NO LIST STATE ================= #}
+{% if lists|length == 0 %}
+<div class="h-full flex items-center justify-center">
+  <div class="text-center w-[90%] max-w-[650px] h-[300px] md:h-[450px]
+              flex flex-col items-center justify-center">
+
+    <h1 class="text-4xl font-bold">No list yet</h1>
+    <p class="text-zinc-400 mt-2">Create your first list to get started</p>
+
+    <form action="{{ url_for('create_list') }}" method="post" class="mt-6 flex gap-2">
+      <input
+        type="text"
+        name="name"
+        placeholder="My first list"
+        required
+        class="px-4 py-2 rounded-md bg-zinc-900 border border-zinc-700
+               text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/20" />
+
+      <button
+        type="submit"
+        class="px-4 py-2 rounded-md bg-white text-black text-sm font-medium">
+        Create
+      </button>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+{# ================= GOOGLE TASKS BOARD VIEW ================= #}
+{% if lists|length > 0 %}
+<div class="h-full w-full px-6 py-6 overflow-x-auto overflow-y-hidden">
+  <div id="listsContainer" class="flex gap-6 min-w-max items-start">
+
+    {% for list in lists %}
+    <div
+      class="list-card w-[280px] sm:w-[300px] lg:w-[320px]
+             flex-shrink-0 rounded-2xl bg-[#0f0f10]
+             border border-white/5 shadow-xl
+             flex flex-col
+             max-h-[calc(100vh-8rem)]"
+      draggable="true"
+      data-id="{{ list.id }}">
+
+      <!-- Header -->
+      <div class="flex items-center justify-between px-5 pt-5">
+        <h2 class="text-lg font-medium truncate">
+          {{ list.name }}
+        </h2>
+
+        <div class="relative list-menu-wrapper">
+          <button
+            onclick="toggleListMenu('{{ list.id }}')"
+            class="p-1.5 rounded-full hover:bg-white/10">
+            ⋮
+          </button>
+
+          <div
+            id="listMenu-{{ list.id }}"
+            class="absolute right-0 mt-2 w-40 rounded-lg bg-[#1f1f1f]
+                   shadow-xl border border-white/10 hidden z-50">
+
+            <button
+              onclick="openRenameListModal('{{ list.id }}', '{{ list.name }}')"
+              class="block w-full px-4 py-2 text-sm text-left hover:bg-white/5">
+              Rename list
+            </button>
+
+            {% if list.name != "Inbox" %}
+            <button
+              onclick="openDeleteListModal('{{ list.id }}')"
+              class="block w-full px-4 py-2 text-sm text-left text-red-400 hover:bg-white/5">
+              Delete list
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Add task -->
+      <div class="px-5 mt-4 shrink-0">
+        <form
+          action="{{ url_for('create_task') }}"
+          method="post"
+          class="flex items-center gap-2">
+
+          <input type="hidden" name="list_id" value="{{ list.id }}"/>
+
+          <input
+            type="text"
+            name="title"
+            placeholder="+ Add a task"
+            class="w-full bg-transparent border-b border-white/10
+                   text-sm text-white placeholder:text-white/50
+                   focus:outline-none focus:border-blue-400"/>
+        </form>
+      </div>
+
+      <!-- Tasks (SCROLLS ONLY WHEN NEEDED) -->
+<div
+class="px-5 py-4 space-y-3 text-sm
+       flex-1 overflow-y-auto overscroll-contain">
+
+{% set list_tasks = tasks | selectattr("list_id", "equalto", list.id) | list %}
+
+{% if list_tasks|length > 0 %}
+  {% for task in list_tasks %}
+    <div class="px-3 py-2 rounded-md bg-white/5">
+      {{ task.title }}
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="text-center text-white/50 mt-10">
+    No tasks yet
+  </div>
+{% endif %}
+
+</div>
+
+
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+{% endif %}
+
+{# ================= RENAME LIST MODAL ================= #}
+<div id="renameListOverlay"
+     onclick="closeRenameListModal()"
+     class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
+
+  <div class="flex items-center justify-center w-full h-full">
+    <div onclick="event.stopPropagation()"
+         class="w-[420px] rounded-2xl bg-[#1f1f1f] p-6 shadow-2xl">
+
+      <h2 class="text-lg font-semibold mb-4">Rename list</h2>
+
+      <form method="post" class="space-y-4">
+        <input
+          type="text"
+          name="name"
+          required
+          class="w-full px-4 py-2 rounded-md bg-zinc-900 border border-zinc-700
+                 text-white text-sm focus:outline-none focus:ring-2 focus:ring-white/20"/>
+
+        <div class="flex justify-end gap-3">
+          <button type="button"
+                  onclick="closeRenameListModal()"
+                  class="text-sm text-zinc-400">
+            Cancel
+          </button>
+
+          <button type="submit"
+                  class="px-4 py-2 rounded-md bg-blue-500 text-black text-sm font-medium">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{# ================= DELETE LIST MODAL ================= #}
+<div id="deleteListOverlay"
+     onclick="closeDeleteListModal()"
+     class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
+
+  <div class="flex items-center justify-center w-full h-full">
+    <div onclick="event.stopPropagation()"
+         class="w-[420px] rounded-2xl bg-[#1f1f1f] p-6 shadow-2xl">
+
+      <h2 class="text-lg font-semibold text-red-400 mb-2">
+        Delete list?
+      </h2>
+
+      <p class="text-sm text-white/70 mb-6">
+        This list and all its tasks will be permanently deleted.
+      </p>
+
+      <form method="post" class="flex justify-end gap-3">
+        <button type="button"
+                onclick="closeDeleteListModal()"
+                class="text-sm text-zinc-400">
+          Cancel
+        </button>
+
+        <button type="submit"
+                class="px-4 py-2 rounded-md bg-red-500 text-black text-sm font-medium">
+          Delete
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/tasks/tasks.js') }}"></script>
+{% endblock %}
+
+
+{% endblock %}

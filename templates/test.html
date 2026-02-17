@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <header class="fixed top-0 left-0 w-full h-16 bg-[#F9F9F9] z-50 flex items-center justify-between px-8 border-b border-gray-200">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 text-gray-900">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full">
+        <span class="font-semibold">TaskFlow</span>
+      </a>
+    
+      <div class="flex items-center gap-4 text-sm">
+        <p class="text-gray-500">Already have an account?</p>
+        <a class="text-blue-600 font-medium hover:text-blue-700 transition" href="/login">Sign In</a>
+      </div>
+    </header>
+
+    <h1>Hi</h1>
+    
+</body>
+</html>

@@ -1,0 +1,526 @@
+<!-- MODAL SETTINGS LAYOUT ONLY -->
+<div class="relative flex h-full w-full min-h-0 items-stretch bg-[#1f1f1f] text-white overflow-hidden rounded-b-2xl">
+
+  <!-- CLOSE (GLOBAL) -->
+  <div class="absolute top-4 right-4 z-10">
+    <button onclick="closeSettings()"
+      class="w-9 h-9 flex items-center justify-center rounded-full
+             text-gray-400 hover:text-white hover:bg-white/10 transition">
+      ✕
+    </button>
+  </div>
+
+  <!-- LEFT NAV -->
+  <aside class="w-64 h-full self-stretch bg-[#212121] p-4 shrink-0 border-r border-white/10">
+    <div class="flex h-full flex-col rounded-2xl px-3 py-4">
+      <div class="px-3 pb-4">
+        <h1 class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">Settings</h1>
+      </div>
+
+      <nav class="flex-1 space-y-2">
+        <button onclick="showSection('account', this)"
+          class="nav-btn group flex w-full items-center gap-3 rounded-full px-3 py-2.5 text-left text-sm font-medium
+                 bg-white/10 text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] transition-colors duration-150">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 flex-none" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/>
+          </svg>
+          <span>Account</span>
+        </button>
+
+        <button onclick="showSection('premium', this)"
+          class="nav-btn group flex w-full items-center gap-3 rounded-full px-3 py-2.5 text-left text-sm font-medium
+                 text-gray-300 transition-colors duration-150 hover:bg-white/5 hover:text-gray-100">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 flex-none" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 7l4 6 5-8 5 8 4-6v10H3z"/>
+          </svg>
+          <span>Premium</span>
+        </button>
+
+        <button onclick="showSection('features', this)"
+          class="nav-btn group flex w-full items-center gap-3 rounded-full px-3 py-2.5 text-left text-sm font-medium
+                 text-gray-300 transition-colors duration-150 hover:bg-white/5 hover:text-gray-100">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 flex-none" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          <span>Features</span>
+        </button>
+
+        <button onclick="showSection('notifications', this)"
+          class="nav-btn group flex w-full items-center gap-3 rounded-full px-3 py-2.5 text-left text-sm font-medium
+                 text-gray-300 transition-colors duration-150 hover:bg-white/5 hover:text-gray-100">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 flex-none" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span>Notifications</span>
+        </button>
+
+        <button onclick="showSection('date-time', this)"
+          class="nav-btn group flex w-full items-center gap-3 rounded-full px-3 py-2.5 text-left text-sm font-medium
+                 text-gray-300 transition-colors duration-150 hover:bg-white/5 hover:text-gray-100">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 flex-none" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v5l3 3"/>
+          </svg>
+          <span>Date &amp; Time</span>
+        </button>
+
+        <button onclick="showSection('appearance', this)"
+          class="nav-btn group flex w-full items-center gap-3 rounded-full px-3 py-2.5 text-left text-sm font-medium
+                 text-gray-300 transition-colors duration-150 hover:bg-white/5 hover:text-gray-100">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 flex-none" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3a9 9 0 0 0 0 18h1a2 2 0 0 0 2-2 1 1 0 0 1 1-1h1a4 4 0 0 0 0-8h-1a1 1 0 0 1-1-1 2 2 0 0 0-2-2h-1z"/>
+            <circle cx="7.5" cy="10.5" r="1"/>
+            <circle cx="9.5" cy="7.5" r="1"/>
+            <circle cx="6.5" cy="13.5" r="1"/>
+          </svg>
+          <span>Appearance</span>
+        </button>
+
+        <button onclick="showSection('about', this)"
+          class="nav-btn group flex w-full items-center gap-3 rounded-full px-3 py-2.5 text-left text-sm font-medium
+                 text-gray-300 transition-colors duration-150 hover:bg-white/5 hover:text-gray-100">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 flex-none" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 16v-4"/>
+            <path d="M12 8h.01"/>
+          </svg>
+          <span>About</span>
+        </button>
+      </nav>
+
+      <div class="mt-4 border-t border-white/10 pt-4">
+        <a href="/logout"
+          class="block rounded-full px-3 py-2 text-sm font-medium text-red-300 transition-colors duration-150 hover:bg-white/5 hover:text-red-200">
+          Log out
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- RIGHT CONTENT -->
+  <section class="flex-1 min-h-0 overflow-y-auto px-8 py-8 bg-[#1a1a1a]">
+    <div class="w-full max-w-none space-y-8">
+
+      <!-- ACCOUNT -->
+      <section id="account" class="settings-section space-y-6">
+
+        <div class="mt-8 flex flex-col items-center gap-1 text-center">
+          <label class="group cursor-pointer">
+            <img
+              src="{{ url_for('static', filename='uploads/' + profile_image) }}"
+              alt="{{ full_name }} profile photo"
+              class="w-20 h-20 rounded-full object-cover border border-white/10 shadow-sm transition group-hover:opacity-90"
+            >
+            <input
+              type="file"
+              name="profile_image"
+              class="hidden"
+              accept="image/*"
+              onchange="uploadProfileImage(this)"
+            >
+          </label>
+          <div class="mt-4 w-full max-w-xs">
+            <input
+              id="profileNameInput"
+              type="text"
+              value="{{ full_name }}"
+              class="w-full bg-transparent text-center text-xl font-semibold tracking-tight outline-none transition focus:text-white/95 focus:border-white/30"
+              autocomplete="name"
+            >
+          </div>
+          {% if account_status %}
+            <p class="mt-1 text-sm text-amber-400">{{ account_status }}</p>
+          {% endif %}
+        </div>
+
+        <!-- INFO CARD -->
+        <div class="w-full max-w-3xl mx-auto rounded-xl bg-[#1E1E1E] divide-y divide-white/10 border border-white/5">
+
+          <div class="flex items-center justify-between px-6 py-4">
+            <p class="text-sm text-gray-400">Email</p>
+            <button
+              type="button"
+              onclick="openChangeEmailModal()"
+              class="text-sm font-medium text-gray-100 hover:text-white/90 transition"
+            >
+              {{ email }}
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between px-6 py-4">
+            <p class="text-sm text-gray-400">Password</p>
+            <p class="text-sm font-medium text-gray-100">Change password</p>
+          </div>
+
+          <div class="flex items-center justify-between px-6 py-4">
+            <p class="text-sm text-gray-400">Username</p>
+            <p class="text-sm font-medium text-gray-100">@{{ username }}</p>
+          </div>
+
+          <div class="flex items-center justify-between px-6 py-4">
+            <p class="text-sm text-gray-400">Email</p>
+            <button
+              type="button"
+              onclick="openChangeEmailModal()"
+              class="text-sm font-medium text-gray-100 hover:text-white/90 transition"
+            >
+              {{ email }}
+            </button>
+          </div>
+
+        </div>
+
+        <!-- AUTH / VERIFICATION CARD -->
+        {% if auth_provider %}
+          <div class="w-full max-w-3xl mx-auto rounded-xl border border-white/10 bg-[#1E1E1E] px-6 py-4 text-sm text-gray-300">
+            Signed in with <span class="font-medium">{{ auth_provider|capitalize }}</span>. Email verified.
+          </div>
+        {% else %}
+          <div class="w-full max-w-3xl mx-auto rounded-xl border border-white/10 bg-[#1E1E1E] px-6 py-4 text-sm">
+            {% if is_verified %}
+              <div class="flex items-center justify-between">
+                <span class="text-green-400 font-medium">Verified</span>
+                <Hook class="text-gray-400 text-xs">Your email is confirmed.</span>
+              </div>
+            {% else %}
+              <div class="flex items-center justify-between">
+                <span class="text-yellow-400 font-medium">Pending verification</span>
+                <a href="/resend-verification" target="_blank" rel="noopener noreferrer"
+                   class="text-xs text-blue-400 hover:text-blue-300">
+                  Verify account
+                </a>
+              </div>
+
+              {% if verify_notice == "sent" %}
+                <p class="mt-2 text-xs text-green-400">Verification email sent.</p>
+              {% elif verify_notice == "already" %}
+                <p class="mt-2 text-xs text-gray-400">Already verified.</p>
+              {% elif verify_notice == "not-applicable" %}
+                <p class="mt-2 text-xs text-gray-400">Verification not required.</p>
+              {% endif %}
+            {% endif %}
+          </div>
+        {% endif %}
+
+      </section>
+
+      <!-- DATE & TIME -->
+      <section id="date-time" class="settings-section hidden space-y-4">
+        <div>
+          <h1 class="text-2xl font-semibold">Date &amp; Time</h1>
+          <p class="text-sm text-gray-400 mt-1">
+            Control time zone, locale, and date format preferences.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-gray-700 bg-[#262626] px-5 py-4">
+          <p class="text-sm text-gray-300">Date and time options are coming soon.</p>
+        </div>
+      </section>
+
+      <!-- APPEARANCE -->
+      <section id="appearance" class="settings-section hidden space-y-6">
+        <div>
+          <h1 class="text-2xl font-semibold">Appearance</h1>
+          <p class="text-sm text-gray-400 mt-1">
+            Choose how TaskFlow looks on your device.
+          </p>
+        </div>
+
+        <div class="space-y-3 max-w-md">
+
+          <label class="flex justify-between items-center p-4 rounded-xl border border-gray-700
+                        cursor-pointer hover:bg-white/5 transition">
+            <span class="text-sm font-medium">Use system setting</span>
+            <input type="radio" name="theme" value="system">
+          </label>
+
+          <label class="flex justify-between items-center p-4 rounded-xl border border-gray-700
+                        cursor-pointer hover:bg-white/5 transition">
+            <span class="text-sm font-medium">Light mode</span>
+            <input type="radio" name="theme" value="light">
+          </label>
+
+          <label class="flex justify-between items-center p-4 rounded-xl border border-gray-700
+                        cursor-pointer hover:bg-white/5 transition">
+            <span class="text-sm font-medium">Dark mode</span>
+            <input type="radio" name="theme" value="dark">
+          </label>
+
+        </div>
+      </section>
+
+      <!-- NOTIFICATIONS -->
+      <section id="notifications" class="settings-section hidden space-y-4">
+        <div>
+          <h1 class="text-2xl font-semibold">Notifications</h1>
+          <p class="text-sm text-gray-400 mt-1">
+            Control how TaskFlow notifies you.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-gray-700 bg-[#262626] px-5 py-4">
+          <p class="text-sm text-gray-300">No notification preferences yet.</p>
+        </div>
+      </section>
+
+      <!-- FEATURES -->
+      <section id="features" class="settings-section hidden space-y-4">
+        <div>
+          <h1 class="text-2xl font-semibold">Features</h1>
+          <p class="text-sm text-gray-400 mt-1">
+            Explore feature access and productivity tools.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-gray-700 bg-[#262626] px-5 py-4">
+          <p class="text-sm text-gray-300">Feature management is coming soon.</p>
+        </div>
+      </section>
+
+      <!-- PREMIUM -->
+      <section id="premium" class="settings-section hidden space-y-4">
+        <div>
+          <h1 class="text-2xl font-semibold">Premium</h1>
+          <p class="text-sm text-gray-400 mt-1">
+            Upgrade to unlock premium tools and storage.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-gray-700 bg-[#262626] px-5 py-4">
+          <p class="text-sm text-gray-300">Premium upgrades are coming soon.</p>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="settings-section hidden space-y-4">
+        <div>
+          <h1 class="text-2xl font-semibold">About</h1>
+          <p class="text-sm text-gray-400 mt-1">
+            Version details and product information.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-gray-700 bg-[#262626] px-5 py-4">
+          <p class="text-sm text-gray-300">TaskFlow build information will live here.</p>
+        </div>
+      </section>
+
+    </div>
+  </section>
+</div>
+
+<!-- CHANGE EMAIL MODAL (OVERLAY) -->
+<div
+  id="changeEmailModal"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 px-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="changeEmailTitle"
+>
+  <div class="w-full max-w-md rounded-2xl border border-white/10 bg-[#1f1f1f] p-6 shadow-xl">
+    <div class="flex items-start justify-between">
+      <div>
+        <h2 id="changeEmailTitle" class="text-lg font-semibold">Change Email</h2>
+        <p class="mt-1 text-sm text-gray-400">Update the email tied to your account.</p>
+      </div>
+      <button
+        type="button"
+        onclick="closeChangeEmailModal()"
+        class="rounded-full p-1 text-gray-400 hover:text-white/90 hover:bg-white/10 transition"
+        aria-label="Close"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="mt-5 space-y-4">
+      <label class="block text-sm text-gray-300">
+        New email
+        <input
+          type="email"
+          class="mt-2 w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm text-white outline-none focus:border-white/30"
+          placeholder="you@example.com"
+        >
+      </label>
+      <label class="block text-sm text-gray-300">
+        Current password
+        <input
+          type="password"
+          class="mt-2 w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 text-sm text-white outline-none focus:border-white/30"
+          placeholder="••••••••"
+        >
+      </label>
+    </div>
+
+    <div class="mt-6 flex items-center justify-end gap-3">
+      <button
+        type="button"
+        onclick="closeChangeEmailModal()"
+        class="rounded-lg px-4 py-2 text-sm text-gray-300 hover:text-white/90 hover:bg-white/10 transition"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="rounded-lg bg-white/10 px-4 py-2 text-sm font-medium text-white hover:bg-white/15 transition"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/core/theme.js') }}"></script>
+
+<script>
+  // ---------- SECTION SWITCHING ----------
+  function showSection(id, btn) {
+    // Hide all sections
+    document.querySelectorAll(".settings-section").forEach(section => {
+      section.classList.add("hidden");
+    });
+
+    // Show target section
+    const target = document.getElementById(id);
+    if (target) target.classList.remove("hidden");
+
+    // Reset nav buttons
+    document.querySelectorAll(".nav-btn").forEach(b => {
+      b.classList.remove(
+        "bg-white/10",
+        "text-white",
+        "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+      );
+      b.classList.add("text-gray-300");
+    });
+
+    // Activate clicked button
+    if (btn) {
+      btn.classList.add(
+        "bg-white/10",
+        "text-white",
+        "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+      );
+      btn.classList.remove("text-gray-300");
+    }
+  }
+
+  // ---------- USER MENU ----------
+  function toggleUserMenu() {
+    const menu = document.getElementById("userMenu");
+    if (menu) menu.classList.toggle("hidden");
+  }
+
+  document.addEventListener("click", (e) => {
+    const menu = document.getElementById("userMenu");
+    if (!menu) return;
+
+    if (!e.target.closest(".relative")) {
+      menu.classList.add("hidden");
+    }
+  });
+
+  // ---------- PROFILE IMAGE UPLOAD ----------
+  function uploadProfileImage(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("profile_image", file);
+
+    fetch("/upload_profile", {
+      method: "POST",
+      body: formData
+    }).then(() => location.reload());
+  }
+
+  // ---------- CHANGE EMAIL MODAL ----------
+  function openChangeEmailModal() {
+    const modal = document.getElementById("changeEmailModal");
+    if (!modal) return;
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  }
+
+  function closeChangeEmailModal() {
+    const modal = document.getElementById("changeEmailModal");
+    if (!modal) return;
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+
+  // ---------- PROFILE NAME EDIT ----------
+  function setupProfileNameEdit() {
+    const nameInput = document.getElementById("profileNameInput");
+    const accountName = document.getElementById("accountFullName");
+    if (!nameInput) return;
+    let saveTimer;
+
+    const saveName = async () => {
+      const nextName = nameInput.value.trim();
+      const currentName = nameInput.defaultValue.trim();
+      if (!nextName || nextName === currentName) {
+        nameInput.value = currentName || nameInput.value;
+        return;
+      }
+
+      try {
+        const body = new URLSearchParams({ full_name: nextName });
+        const response = await fetch("/update_profile_name", {
+          method: "POST",
+          body
+        });
+
+        if (response.ok) {
+          nameInput.defaultValue = nextName;
+          if (accountName) accountName.textContent = nextName;
+        } else {
+          nameInput.value = currentName;
+          return;
+        }
+      } catch (error) {
+        nameInput.value = currentName;
+        return;
+      }
+    };
+
+    const scheduleSave = () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveName, 500);
+    };
+
+    nameInput.addEventListener("input", () => {
+      scheduleSave();
+    });
+
+    nameInput.addEventListener("blur", () => {
+      saveName();
+    });
+
+    nameInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        nameInput.blur();
+      }
+      if (event.key === "Escape") {
+        event.preventDefault();
+        nameInput.value = nameInput.defaultValue;
+        nameInput.blur();
+      }
+    });
+  }
+
+  // ---------- THEME HANDLING ----------
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.ThemeManager) {
+      window.ThemeManager.syncThemeInputs(document);
+    }
+    setupProfileNameEdit();
+  });
+</script>

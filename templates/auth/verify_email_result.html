@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verification — TaskFlow</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#F9F9F9] min-h-screen">
+  <main class="min-h-screen flex items-center justify-center px-6">
+    <div class="w-full max-w-[460px] bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
+      {% if status == "verified" %}
+        <h1 class="text-2xl font-semibold mb-2">Email verified</h1>
+        <p class="text-sm text-gray-600 mb-6">Your account is now active. You can sign in.</p>
+        <a href="/login"
+           class="inline-block rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition">
+          Go to login
+        </a>
+      {% elif status == "pending" %}
+        <h1 class="text-2xl font-semibold mb-2">Check your inbox</h1>
+        <p class="text-sm text-gray-600">We sent a verification link to your email. Open it to finish verifying your account.</p>
+      {% elif status == "expired" %}
+        <h1 class="text-2xl font-semibold mb-2">Verification link expired</h1>
+        <p class="text-sm text-gray-600">Please register again to receive a new verification email.</p>
+      {% else %}
+        <h1 class="text-2xl font-semibold mb-2">Invalid verification link</h1>
+        <p class="text-sm text-gray-600">The link is invalid or has already been used.</p>
+      {% endif %}
+    </div>
+  </main>
+</body>
+</html>

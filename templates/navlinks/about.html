@@ -1,0 +1,412 @@
+<!<!DOCTYPE html>
+<html lang="en" class="scrollbar-hide">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskFlow | Productivity</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!- Fonts>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@400&display=swap" rel="stylesheet">
+
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='design-system.css') }}">--> 
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+
+  
+  
+  
+</head>
+
+<body class="bg-[#0B0F14] scrollbar-hide">
+
+  <header class="fixed top-0 left-0 w-full h-[72px] z-50 bg-[#0B0F14]/70 backdrop-blur-md border-b border-white/10">
+
+    <div class="max-w-none mx-auto h-full flex items-center justify-between px-6 md:px-10">
+  
+      <!-- Left -->
+      <div class="flex items-center gap-10">
+        <a href="/" class="flex items-center gap-2 text-white">
+          <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full">
+          <span class="font-semibold tracking-tight">TaskFlow</span>
+        </a>
+  
+        <nav class="hidden md:flex gap-10 text-sm">
+          <a href="/features" class="nav-link transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/features' else 'text-white/70' }}">
+            Features
+          </a>
+          <a href="/premium" class="nav-link transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/premium' else 'text-white/70' }}">
+            Premium
+          </a>
+          <a href="/pricing" class="nav-link transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/pricing' else 'text-white/70' }}">
+            Pricing
+          </a>
+          <a href="/about" class="nav-link transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/about' else 'text-white/70' }}">
+            About
+          </a>
+        </nav>
+      </div>
+  
+      <!-- Right -->
+      <div class="flex items-center gap-6">
+        <div class="hidden md:block h-6 w-px bg-white/20"></div>
+  
+        <div class="hidden md:flex gap-4">
+          <a href="/login" class="text-white/70 hover:text-white px-4 py-2 transition">
+            Log in
+          </a>
+          <a href="/register"
+             class="bg-white text-gray-900 px-4 py-2 rounded-md font-semibold hover:bg-white/90 transition">
+            Sign up
+          </a>
+        </div>
+  
+      </div>
+
+      <!-- Mobile Menu Button -->
+    <button id="menuOpen" class="md:hidden text-white text-2xl">
+      ☰
+    </button>
+
+  
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+<div id="mobileMenu"
+class="fixed inset-0 z-[60] bg-[#0B0F14] text-white translate-x-full transition-transform duration-300 ease-out">
+
+<!-- Top Bar -->
+<div class="h-[72px] flex items-center justify-between px-6 border-b border-white/10">
+  <a href="/" class="flex items-center gap-2 text-white">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full">
+    <span class="font-semibold tracking-tight">TaskFlow</span>
+  </a>
+
+<button id="menuClose" class="text-2xl">✕</button>
+</div>
+
+<!-- Menu Content -->
+<div class="px-6 py-8 flex flex-col gap-6 text-base">
+
+<a href="/features" class="transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/features' else 'text-white/80' }}">Features</a>
+<a href="/pricing" class="transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/pricing' else 'text-white/80' }}">Pricing</a>
+<a href="/blog" class="text-white/80 hover:text-white">Blog</a>
+
+<details class="group">
+ <summary class="cursor-pointer text-white/80 hover:text-white">
+   More
+ </summary>
+ <div class="mt-4 ml-4 flex flex-col gap-3 text-white/60">
+   <a href="/contact">Contact</a>
+   <a href="/about" class="transition hover:text-white {{ 'active text-white drop-shadow-[0_0_12px_rgba(96,165,250,0.35)]' if request.path == '/about' else '' }}">About</a>
+ </div>
+</details>
+
+<div class="mt-8 flex flex-col gap-4">
+ <a href="/register"
+    class="w-full text-center bg-white text-gray-900 py-3 rounded-md font-semibold">
+   Sign up
+ </a>
+ <a href="/login"
+    class="w-full text-center border border-white/20 py-3 rounded-md">
+   Log in
+ </a>
+</div>
+</div>
+</div>
+
+<!-- ================= ABOUT PAGE ================= -->
+
+<!-- HERO -->
+<section class="pt-[160px] pb-[120px] px-6 md:px-[64px] bg-[#0B0F14] text-white">
+  <div class="max-w-[900px] mx-auto text-center flex flex-col gap-6">
+    <p class="text-sm uppercase tracking-wider text-white/50">
+      About TaskFlow
+    </p>
+
+    <h1 class="text-[44px] md:text-[56px] font-bold tracking-tight leading-[1.05]">
+      Productivity shouldn’t feel overwhelming
+    </h1>
+
+    <p class="text-lg text-white/70 max-w-[720px] mx-auto">
+      TaskFlow was built to help people focus on what actually matters today —
+      without juggling apps, systems, or motivation hacks.
+    </p>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="py-[120px] px-6 md:px-[64px] bg-[#0B0F14] text-white">
+  <div class="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-16 items-start">
+
+    <div class="flex flex-col gap-4">
+      <h2 class="text-[32px] font-bold tracking-tight">
+        The problem with productivity tools
+      </h2>
+
+      <p class="text-white/70 leading-relaxed">
+        Most productivity apps are either too simple to help you improve,
+        or so complex that staying consistent becomes the hardest part.
+      </p>
+
+      <p class="text-white/70 leading-relaxed">
+        Tasks live in one app. Habits live in another.
+        Planning your day feels like work before the work even begins.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4 border border-white/10 rounded-xl p-8 bg-white/5">
+      <p class="text-white/80">
+        People don’t fail because they lack motivation.
+      </p>
+      <p class="text-white/80">
+        They fail because they don’t have a clear, repeatable daily system.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="py-[120px] px-6 md:px-[64px] bg-[#0E131A] text-white">
+  <div class="max-w-[900px] mx-auto flex flex-col gap-6">
+
+    <h2 class="text-[36px] font-bold tracking-tight">
+      TaskFlow is built around one simple idea
+    </h2>
+
+    <p class="text-lg text-white/70">
+      You should open one page each day and immediately know what to do next.
+    </p>
+
+    <ul class="mt-6 space-y-4 text-white/70">
+      <li>• One Today page — no clutter, no guessing</li>
+      <li>• Tasks and habits in a single daily flow</li>
+      <li>• AI that guides behavior instead of dumping information</li>
+      <li>• Progress that builds consistency, not pressure</li>
+    </ul>
+
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="py-[120px] px-6 md:px-[64px] bg-[#0B0F14] text-white">
+  <div class="max-w-[1100px] mx-auto grid md:grid-cols-3 gap-10">
+
+    <div>
+      <h3 class="text-xl font-semibold mb-3">Students</h3>
+      <p class="text-white/70">
+        Who want structure without rigid systems.
+      </p>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-semibold mb-3">Builders & creators</h3>
+      <p class="text-white/70">
+        Who care about momentum more than perfect plans.
+      </p>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-semibold mb-3">Anyone struggling with consistency</h3>
+      <p class="text-white/70">
+        Who knows what to do — but needs help doing it daily.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHAT WE'RE BUILDING -->
+<section class="py-[120px] px-6 md:px-[64px] bg-[#0E131A] text-white">
+  <div class="max-w-[900px] mx-auto flex flex-col gap-6">
+
+    <h2 class="text-[36px] font-bold tracking-tight">
+      What we’re building
+    </h2>
+
+    <p class="text-white/70 leading-relaxed">
+      TaskFlow is intentionally focused.
+      We’re starting with a simple, powerful daily system before expanding.
+    </p>
+
+    <p class="text-white/70 leading-relaxed">
+      No team dashboards. No social feeds. No noise.
+      Just a tool that helps you plan today, follow through, and improve tomorrow.
+    </p>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-[120px] px-6 md:px-[64px] bg-[#0B0F14] text-white text-center">
+  <div class="max-w-[720px] mx-auto flex flex-col gap-6">
+
+    <h2 class="text-[36px] font-bold tracking-tight">
+      Ready to build better days?
+    </h2>
+
+    <p class="text-white/70">
+      Start free. Upgrade only if it actually helps you stay consistent.
+    </p>
+
+    <div class="flex justify-center gap-4 mt-4">
+      <a href="/register"
+         class="bg-white text-gray-900 px-6 py-3 rounded-md font-semibold hover:bg-white/90 transition">
+        Get started
+      </a>
+
+      <a href="/features"
+         class="border border-white/20 px-6 py-3 rounded-md font-semibold hover:border-white/40 transition">
+        Explore features
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<footer class="bg-[#0B0F14] border-t border-white/10 px-6 md:px-[64px] py-20 text-white">
+  <div class="max-w-[1280px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+
+    <!-- Brand / Contact -->
+    <div class="flex flex-col gap-4">
+      <div class="flex items-center gap-2">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full">
+        <span class="font-semibold">TaskFlow</span>
+      </div>
+
+      <p class="text-white/60 text-sm max-w-xs">
+        One workspace for clarity, focus, and momentum.
+      </p>
+
+      <div class="text-white/50 text-sm space-y-2 mt-4">
+        <p>500 N Akard St<br>Dallas, TX 75201</p>
+        <p>1 (844) 827-5435</p>
+        <p>
+          <a href="mailto:hello@taskflowhq.com" class="hover:text-white transition">
+            hello@taskflowhq.com
+          </a>
+        </p>
+      </div>
+
+      <!-- Socials -->
+      <div class="flex items-center gap-4 mt-4 text-white/50">
+        <!-- Facebook -->
+  <a href="#" aria-label="Facebook" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-3h2.4V9.5c0-2.4 1.4-3.7 3.6-3.7
+               1 0 2 .2 2 .2v2.3h-1.1c-1.1 0-1.4.7-1.4 1.4V12H16l-.4 3h-2.5v7A10
+               10 0 0 0 22 12z"/>
+    </svg>
+  </a>
+
+  <!-- Instagram -->
+  <a href="#" aria-label="Instagram" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2
+               5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3
+               3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5
+               3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0
+               2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4.5-.9a1.1
+               1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2z"/>
+    </svg>
+  </a>
+
+  <!-- X / Twitter -->
+  <a href="#" aria-label="X" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.3 2H21l-6.6 7.6L22 22h-6.6l-5.2-6.8L4.6 22H2l7.1-8.2
+               L2 2h6.8l4.7 6.2L18.3 2zm-2.3 18h1.5L8.2
+               4H6.6l9.4 16z"/>
+    </svg>
+  </a>
+
+  <!-- LinkedIn -->
+  <a href="#" aria-label="LinkedIn" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M4.98 3.5A2.5 2.5 0 1 0 5 8a2.5 2.5
+               0 0 0-.02-4.5zM3 9h4v12H3V9zm7
+               0h3.8v1.6h.1c.5-.9 1.7-1.8
+               3.6-1.8 3.9 0 4.6 2.5
+               4.6 5.8V21h-4v-5.3c0-1.3
+               0-3-1.9-3s-2.2 1.4-2.2
+               2.9V21h-4V9z"/>
+    </svg>
+  </a>
+      </div>
+    </div>
+
+    <!-- Product -->
+    <div>
+      <p class="font-semibold mb-4">Product</p>
+      <ul class="space-y-3 text-white/60 text-sm">
+        <li><a href="/features" class="hover:text-white transition">Features</a></li>
+        <li><a href="/pricing" class="hover:text-white transition">Pricing</a></li>
+        <li><a href="/premium" class="hover:text-white transition">Premium</a></li>
+      </ul>
+    </div>
+
+    <!-- Company -->
+    <div>
+      <p class="font-semibold mb-4">Company</p>
+      <ul class="space-y-3 text-white/60 text-sm">
+        <li><a href="/about" class="hover:text-white transition">About</a></li>
+        <li><a href="/blog" class="hover:text-white transition">Blog</a></li>
+        <li><a href="/contact" class="hover:text-white transition">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Legal -->
+    <div>
+      <p class="font-semibold mb-4">Legal</p>
+      <ul class="space-y-3 text-white/60 text-sm">
+        <li><a href="/privacy" class="hover:text-white transition">Privacy Policy</a></li>
+        <li><a href="/terms" class="hover:text-white transition">Terms of Service</a></li>
+        <li><a href="/cookie" class="hover:text-white transition">Cookies Settings</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="max-w-[1280px] mx-auto mt-16 pt-8 border-t border-white/10
+              flex flex-col md:flex-row justify-between items-center
+              text-white/40 text-sm gap-4">
+    <span>© 2025 TaskFlow. All rights reserved.</span>
+
+    <div class="flex items-center gap-6">
+      <a href="/privacy" class="hover:text-white">Privacy Policy</a>
+      <a href="/terms" class="hover:text-white">Terms of Service</a>
+      <a href="/cookie" class="hover:text-white">Cookies Settings</a>
+    </div>
+  </div>
+</footer>
+
+    
+    <!-- ================= SCRIPTS ================= -->
+    <script>
+      const menuBtn = document.getElementById("menuBtn");
+      const overlay = document.getElementById("mobileOverlay");
+      const backdrop = document.getElementById("backdrop");
+      const body = document.body;
+    
+      menuBtn.addEventListener("click", () => {
+        overlay.classList.remove("hidden");
+        body.classList.add("overflow-hidden");
+      });
+    
+      backdrop.addEventListener("click", () => {
+        overlay.classList.add("hidden");
+        body.classList.remove("overflow-hidden");
+      });
+    </script>
+
+
+
+</body>
+</html>

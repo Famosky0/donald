@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" class="scrollbar-hide scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow — Terms of Service</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#0B0F14] text-white font-[Inter]">
+
+<!-- HEADER -->
+<header class="fixed top-0 left-0 w-full h-[72px] z-50 bg-[#0B0F14]/70 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-[1280px] mx-auto h-full flex items-center justify-between px-6">
+    <a href="/" class="flex items-center gap-2">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full">
+      <span class="font-semibold tracking-tight">TaskFlow</span>
+    </a>
+
+    <a href="/register" class="text-sm text-white/60 hover:text-white transition">
+      Create account
+    </a>
+  </div>
+</header>
+
+<!-- PAGE -->
+<main class="pt-[120px] pb-[140px] px-6">
+  <div class="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-12">
+
+    <!-- TABLE OF CONTENTS -->
+    <aside class="hidden lg:block sticky top-[120px] h-fit">
+      <p class="text-sm font-semibold text-white/50 mb-4">On this page</p>
+      <nav class="space-y-3 text-sm">
+        <a href="#acceptance" class="block text-white/60 hover:text-white">Acceptance</a>
+        <a href="#eligibility" class="block text-white/60 hover:text-white">Eligibility</a>
+        <a href="#accounts" class="block text-white/60 hover:text-white">Accounts</a>
+        <a href="#usage" class="block text-white/60 hover:text-white">Acceptable Use</a>
+        <a href="#content" class="block text-white/60 hover:text-white">User Content</a>
+        <a href="#ai" class="block text-white/60 hover:text-white">AI Features</a>
+        <a href="#availability" class="block text-white/60 hover:text-white">Availability</a>
+        <a href="#termination" class="block text-white/60 hover:text-white">Termination</a>
+        <a href="#liability" class="block text-white/60 hover:text-white">Liability</a>
+        <a href="#contact" class="block text-white/60 hover:text-white">Contact</a>
+      </nav>
+    </aside>
+
+    <!-- CONTENT -->
+    <section class="bg-[#0F141B] border border-white/10 rounded-xl p-8 md:p-12">
+
+      <h1 class="text-[40px] font-bold tracking-tight">Terms of Service</h1>
+      <p class="mt-2 text-sm text-white/50">Last updated: December 18, 2025</p>
+
+      <div class="mt-12 space-y-10 text-sm text-white/75 leading-relaxed">
+
+        <!-- 1 -->
+        <section id="acceptance">
+          <h2 class="text-white font-semibold text-lg mb-2">1. Acceptance of Terms</h2>
+          <p>
+            By accessing or using TaskFlow (“TaskFlow,” “we,” “us,” or “our”), you agree to be
+            bound by these Terms of Service (“Terms”). If you do not agree, do not use the Service.
+          </p>
+        </section>
+
+        <!-- 2 -->
+        <section id="eligibility">
+          <h2 class="text-white font-semibold text-lg mb-2">2. Eligibility</h2>
+          <p>
+            You must be able to form a legally binding contract in your jurisdiction.
+            If you are under the minimum age required by law, you may only use TaskFlow
+            with parental or guardian consent.
+          </p>
+        </section>
+
+        <!-- 3 -->
+        <section id="accounts">
+          <h2 class="text-white font-semibold text-lg mb-2">3. Account Registration & Security</h2>
+          <ul class="list-disc pl-5 space-y-2">
+            <li>You are responsible for all activity under your account.</li>
+            <li>You must keep your credentials secure and confidential.</li>
+            <li>You agree to notify us immediately of any unauthorized access.</li>
+          </ul>
+        </section>
+
+        <!-- 4 -->
+        <section id="usage">
+          <h2 class="text-white font-semibold text-lg mb-2">4. Acceptable Use</h2>
+          <p>You agree not to:</p>
+          <ul class="list-disc pl-5 space-y-2 mt-2">
+            <li>Use TaskFlow for illegal, harmful, or abusive activities.</li>
+            <li>Reverse engineer, scrape, or disrupt the Service.</li>
+            <li>Upload malware or exploit vulnerabilities.</li>
+            <li>Impersonate others or misrepresent your identity.</li>
+          </ul>
+        </section>
+
+        <!-- 5 -->
+        <section id="content">
+          <h2 class="text-white font-semibold text-lg mb-2">5. User Content</h2>
+          <p>
+            You retain ownership of all content you create in TaskFlow.
+            By using the Service, you grant TaskFlow a limited, non-exclusive license
+            to host, process, and display your content solely to operate and improve the Service.
+          </p>
+        </section>
+
+        <!-- 6 -->
+        <section id="ai">
+          <h2 class="text-white font-semibold text-lg mb-2">6. AI Features</h2>
+          <p>
+            TaskFlow may offer AI-powered suggestions, insights, or recommendations.
+            These outputs are provided for informational purposes only and may be inaccurate.
+          </p>
+          <p class="mt-2">
+            You are solely responsible for decisions made based on AI-generated content.
+            TaskFlow does not guarantee outcomes or results.
+          </p>
+        </section>
+
+        <!-- 7 -->
+        <section id="availability">
+          <h2 class="text-white font-semibold text-lg mb-2">7. Service Availability & Changes</h2>
+          <p>
+            We may modify, suspend, or discontinue any part of the Service at any time.
+            While we aim for high availability, the Service is provided “as is”
+            and may experience interruptions.
+          </p>
+        </section>
+
+        <!-- 8 -->
+        <section id="termination">
+          <h2 class="text-white font-semibold text-lg mb-2">8. Termination</h2>
+          <p>
+            We may suspend or terminate your account if you violate these Terms.
+            You may stop using TaskFlow at any time.
+          </p>
+        </section>
+
+        <!-- 9 -->
+        <section id="liability">
+          <h2 class="text-white font-semibold text-lg mb-2">9. Disclaimer & Limitation of Liability</h2>
+          <p>
+            TaskFlow is provided without warranties of any kind.
+            To the maximum extent permitted by law, TaskFlow will not be liable
+            for indirect, incidental, consequential, or punitive damages,
+            including loss of data, profits, or productivity.
+          </p>
+        </section>
+
+        <!-- 10 -->
+        <section id="contact">
+          <h2 class="text-white font-semibold text-lg mb-2">10. Contact</h2>
+          <p>
+            Questions about these Terms?
+            Email us at
+            <a href="mailto:support@taskflowhq.com"
+               class="underline underline-offset-4 hover:text-white transition">
+              support@taskflowhq.com
+            </a>
+          </p>
+        </section>
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="mt-14 pt-6 border-t border-white/10 flex items-center justify-between text-sm">
+        <a href="/privacy" class="text-white/60 hover:text-white transition">Privacy Policy</a>
+        <a href="/" class="text-white/60 hover:text-white transition">Back to home</a>
+      </div>
+
+    </section>
+  </div>
+</main>
+
+</body>
+</html>

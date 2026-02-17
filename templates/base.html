@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow</title>
+
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('theme') || 'system';
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const useDark = savedTheme === 'dark' || (savedTheme === 'system' && prefersDark);
+      document.documentElement.classList.toggle('dark', useDark);
+    })();
+  </script>
+
+<style>
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+</style>
+
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+  <script defer src="{{ url_for('static', filename='js/core/theme.js') }}"></script>
+</head>
+
+<body class="m-0 h-screen overflow-hidden bg-[#F9F8F7] dark:bg-[#1A1A1A] text-gray-900 dark:text-white">
+
+    <div
+    id="dashboardLayout"
+    class="grid h-full min-h-0 overflow-hidden
+           grid-rows-[4rem_1fr]
+           grid-cols-[5rem_1fr]
+           sm:grid-cols-[6rem_1fr]
+           lg:grid-cols-[7rem_1fr]
+           xl:grid-cols-[8rem_1fr]"
+
+    style="
+      grid-template-areas:
+        'header header'
+        'left   main';
+    "
+  >
+    <!-- HEADER -->
+    <header
+    class="grid grid-cols-3 items-stretch h-14"
+    style="grid-area: header;">
+
+        <!-- Left -->
+        <div class="h-full w-full text-white flex items-center justify-start px-2">
+            <div class="flex items-center gap-2">
+            <!-- Hamburger -->
+            <button
+  onclick="toggleSidebar()"
+  class="p-1.5 rounded-md
+         text-zinc-400
+         hover:text-zinc-200
+         hover:bg-white/5
+         transition"
+  aria-label="Toggle navigation"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="w-5 h-5"
+  >
+    <path d="M4 6h16"/>
+    <path d="M4 12h16"/>
+    <path d="M4 18h16"/>
+  </svg>
+</button>
+
+            
+                
+              <!-- Logo -->
+              <div class="flex items-center">
+                <h1 class="text-sm font-medium text-zinc-400 tracking-wide">
+                  {{ page_title or "TaskFlow" }}
+                </h1>                
+              </div>              
+            </div>
+        </div>
+
+  
+      <!-- Center -->
+      <div class="h-full w-full text-white flex items-center justify-center">
+      </div>
+  
+      <!-- Right -->
+<div class="h-full w-full flex items-center justify-end px-2">
+    <div class="flex items-center gap-3">
+  
+      <!-- ADD BUTTON 
+      <button
+        class="p-2 rounded-md text-gray-700 dark:text-zinc-200
+               hover:bg-gray-100 dark:hover:bg-zinc-800 transition"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5"
+          viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0
+               9 9 0 0 1 18 0Z"/>
+        </svg>
+      </button> -->
+  
+      <!-- USER PROFILE -->
+      <div class="relative">
+        <button
+          onclick="toggleUserMenu()"
+          class="w-10 h-10 rounded-full flex items-center justify-center
+                 transition hover:bg-black/5 dark:hover:bg-white/10"
+        >
+          <img
+            src="{{ url_for('static', filename='uploads/' + profile_image) }}"
+            alt="Profile"
+            class="w-8 h-8 rounded-full object-cover"
+          />
+        </button>
+  
+        <!-- DROPDOWN -->
+        <div
+          id="userMenu"
+          class="absolute right-0 mt-2 w-44 bg-[#1f1f1f]
+                 rounded-lg hidden shadow-lg z-50"
+        >
+          <button onclick="openSettings()"
+            class="block w-full px-4 py-2 text-left text-sm hover:bg-[#2c2c2c] rounded-t-lg">
+            Settings
+          </button>
+  
+          <a href="/stats"
+            class="block px-4 py-2 text-sm hover:bg-[#2c2c2c]">
+            Statistics
+          </a>
+  
+          <a href="/premium"
+            class="block px-4 py-2 text-sm hover:bg-[#2c2c2c]">
+            Premium
+          </a>
+  
+          <label
+            class="block px-4 py-2 text-sm hover:bg-[#2c2c2c] cursor-pointer">
+            Change photo
+            <input type="file" class="hidden" accept="image/*"
+              onchange="uploadProfileImage(this)" />
+          </label>
+  
+          <div class="border-t border-gray-700 my-1"></div>
+  
+          <a href="/logout"
+            class="block px-4 py-2 text-sm text-red-400 hover:bg-[#2c2c2c] rounded-b-lg">
+            Log out
+          </a>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
+    </header>
+
+    <aside id="sidebar" style="grid-area: left;" class="border-r border-black/[0.05] dark:border-white/[0.08]">
+      <nav class="h-full px-2 py-3 text-sm">
+        <ul class="flex flex-col gap-1">
+      
+          <!-- SEARCH -->
+          <li>
+            <a href="/search"
+               class="nav-item {{ 'active' if active_page == 'search' else '' }} flex items-center gap-2 px-2 py-2 rounded-md
+                      text-zinc-500 hover:text-white hover:bg-white/5">
+              <!-- Search icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="hidden md:block w-4 h-4"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <circle cx="11" cy="11" r="8" stroke-width="2"/>
+                <path d="m21 21-4.3-4.3" stroke-width="2"/>
+              </svg>
+              <span>Search</span>
+            </a>
+          </li>
+      
+          <!-- HOME -->
+          <li>
+            <a href="/home"
+               class="nav-item {{ 'active' if active_page == 'home' else '' }} flex items-center gap-2 px-2 py-2 rounded-md
+                      text-zinc-500 hover:text-white hover:bg-white/5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="hidden md:block w-4 h-4"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"
+                      stroke-width="2"/>
+              </svg>
+              <span>Home</span>
+            </a>
+          </li>
+      
+          <!-- TASKS -->
+          <li>
+            <a href="/tasks"
+               class="nav-item {{ 'active' if active_page == 'tasks' else '' }} flex items-center gap-2 px-2 py-2 rounded-md
+                      text-zinc-500 hover:text-white hover:bg-white/5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="hidden md:block w-4 h-4"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M9 6h11M9 12h11M9 18h11M5 6h.01M5 12h.01M5 18h.01"
+                      stroke-width="2"/>
+              </svg>
+              <span>Tasks</span>
+            </a>
+          </li>
+      
+          <!-- HABITS -->
+          <li>
+            <a href="/habits"
+               class="nav-item {{ 'active' if active_page == 'habits' else '' }} flex items-center gap-2 px-2 py-2 rounded-md
+                      text-zinc-500 hover:text-white hover:bg-white/5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="hidden md:block w-4 h-4"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M12 6v6l4 2" stroke-width="2"/>
+                <circle cx="12" cy="12" r="9" stroke-width="2"/>
+              </svg>
+              <span>Habits</span>
+            </a>
+          </li>
+      
+          <!-- NOTES -->
+          <li>
+            <a href="/notes"
+               id="notesNavLink"
+               data-mobile-href="/notes"
+               data-desktop-href="/notes"
+               class="nav-item {{ 'active' if active_page == 'notes' else '' }} flex items-center gap-2 px-2 py-2 rounded-md
+                      text-zinc-500 hover:text-white hover:bg-white/5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="hidden md:block w-4 h-4"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M4 4h16v16H4z" stroke-width="2"/>
+                <path d="M8 8h8M8 12h8M8 16h5" stroke-width="2"/>
+              </svg>
+              <span>Notes</span>
+            </a>
+          </li>
+      
+          <!-- CALENDAR -->
+          <li>
+            <a href="/calendar"
+               class="nav-item {{ 'active' if active_page == 'calendar' else '' }} flex items-center gap-2 px-2 py-2 rounded-md
+                      text-zinc-500 hover:text-white hover:bg-white/5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="hidden md:block w-4 h-4"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"
+                      stroke-width="2"/>
+                <path d="M16 2v4M8 2v4M3 10h18"
+                      stroke-width="2"/>
+              </svg>
+              <span>Calendar</span>
+            </a>
+          </li>
+      
+          <!-- DIVIDER -->
+          <li class="my-2 border-t border-white/10"></li>
+      
+          <!-- SETTINGS -->
+          <li>
+            <button onclick="openSettings()"
+               class="nav-item {{ 'active' if active_page == 'settings' else '' }} w-full flex items-center gap-2 px-2 py-2 rounded-md
+                      text-zinc-500 hover:text-white hover:bg-white/5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="hidden md:block w-4 h-4"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M12 15.5a3.5 3.5 0 1 0 0-7
+                         3.5 3.5 0 0 0 0 7Z"
+                      stroke-width="2"/>
+                <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1
+                         a2 2 0 0 1-2.8 2.8l-.1-.1
+                         a1.7 1.7 0 0 0-1.9-.3
+                         1.7 1.7 0 0 0-1 1.5V21
+                         a2 2 0 0 1-4 0v-.1
+                         a1.7 1.7 0 0 0-1-1.5
+                         1.7 1.7 0 0 0-1.9.3l-.1.1
+                         a2 2 0 1 1-2.8-2.8l.1-.1
+                         a1.7 1.7 0 0 0 .3-1.9
+                         1.7 1.7 0 0 0-1.5-1H3
+                         a2 2 0 0 1 0-4h.1
+                         a1.7 1.7 0 0 0 1.5-1
+                         1.7 1.7 0 0 0-.3-1.9l-.1-.1
+                         a2 2 0 1 1 2.8-2.8l.1.1
+                         a1.7 1.7 0 0 0 1.9.3
+                         1.7 1.7 0 0 0 1-1.5V3
+                         a2 2 0 0 1 4 0v.1
+                         a1.7 1.7 0 0 0 1 1.5
+                         1.7 1.7 0 0 0 1.9-.3l.1-.1
+                         a2 2 0 1 1 2.8 2.8l-.1.1
+                         a1.7 1.7 0 0 0-.3 1.9
+                         1.7 1.7 0 0 0 1.5 1H21
+                         a2 2 0 0 1 0 4h-.1
+                         a1.7 1.7 0 0 0-1.5 1Z"
+                      stroke-width="2"/>
+              </svg>
+              <span>Settings</span>
+            </button>
+          </li>
+      
+          <!-- TRASH -->
+          <li>
+            <a href="/trash"
+               class="nav-item {{ 'active' if active_page == 'trash' else '' }} flex items-center gap-2 px-2 py-2 rounded-md
+                      text-red-400 hover:bg-red-500/10">
+              <svg xmlns="http://www.w3.org/2000/svg" class="hidden md:block w-4 h-4"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"
+                      stroke-width="2"/>
+              </svg>
+              <span>Trash</span>
+            </a>
+          </li>
+      
+        </ul>
+      </nav>
+      
+
+    </aside>
+    <main id="mainContent" style="grid-area: main;" class="main-area overflow-hidden min-h-0">{% block content %}{% endblock %}</main>
+
+    <!--Settings Modal-->
+<div id="settingsOverlay"
+     onclick="closeSettings()"
+     class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
+
+  <div class="flex items-center justify-center w-full h-full py-10">
+    <div onclick="event.stopPropagation()"
+    class="w-[1100px] max-w-[calc(100vw-80px)]
+        h-[min(700px,calc(100vh-80px))]
+        bg-[#1f1f1f] rounded-2xl shadow-2xl relative overflow-hidden">
+
+
+      <div id="settingsContent"
+           class="h-full w-full overflow-hidden min-h-0">
+        <div class="flex items-center justify-center h-full text-gray-400 text-sm">
+          Loading settings...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE LIST MODAL -->
+<div id="createListOverlay"
+     onclick="closeCreateListModal()"
+     class="modal hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
+
+  <div class="flex items-center justify-center w-full h-full">
+    <div onclick="event.stopPropagation()"
+         class="w-[420px] rounded-2xl bg-[#1f1f1f] shadow-2xl p-6">
+
+      <h2 class="text-lg font-semibold mb-4">Create new list</h2>
+
+      <form action="{{ url_for('create_list') }}" method="post" class="space-y-4">
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter name"
+          required
+          autofocus
+          class="w-full px-4 py-2 rounded-md
+                 bg-zinc-900 border border-zinc-700
+                 text-white text-sm
+                 focus:outline-none focus:ring-2 focus:ring-white/20"/>
+
+        <div class="flex justify-end gap-3">
+          <button type="button"
+                  onclick="closeCreateListModal()"
+                  class="text-sm text-zinc-400 hover:text-white">
+            Cancel
+          </button>
+
+          <button type="submit"
+                  class="px-4 py-2 rounded-md bg-blue-500 text-black text-sm font-medium">
+            Done
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+    </div>
+    <script src="{{ url_for('static', filename='js/core/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/ui/modals.js') }}"></script>
+
+    {% block scripts %}{% endblock %}
+
+    <script>
+      /* =====================================================
+         SIDEBAR (Left navigation collapse)
+         ===================================================== */
+      
+      const SIDEBAR_STORAGE_KEY = "sidebar-collapsed";
+
+      function getStoredSidebarState() {
+        try {
+          const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+          return stored === null ? false : stored === "true";
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function persistSidebarState(collapsed) {
+        try {
+          localStorage.setItem(SIDEBAR_STORAGE_KEY, String(collapsed));
+        } catch (error) {
+          // Ignore storage failures (private mode, etc.)
+        }
+        window.AppShell = window.AppShell || {};
+        window.AppShell.sidebarCollapsed = collapsed;
+      }
+
+      function setSidebarCollapsed(collapsed) {
+        const layout = document.getElementById("dashboardLayout");
+        const sidebar = document.getElementById("sidebar");
+
+        if (!layout || !sidebar) return;
+
+        layout.classList.toggle("sidebar-collapsed", collapsed);
+        sidebar.setAttribute("aria-hidden", String(collapsed));
+        persistSidebarState(collapsed);
+      }
+
+      /**
+       * Toggles the sidebar collapsed state.
+       * - Adds/removes a CSS class on the layout
+       * - Updates aria-hidden for accessibility
+       * - Persists the state for future navigations
+       */
+      function toggleSidebar() {
+        const layout = document.getElementById("dashboardLayout");
+        if (!layout) return;
+        const collapsed = !layout.classList.contains("sidebar-collapsed");
+        setSidebarCollapsed(collapsed);
+      }
+
+      (function initSidebarState() {
+        setSidebarCollapsed(getStoredSidebarState());
+      })();
+      
+      
+      /* =====================================================
+         USER MENU (Profile avatar dropdown)
+         ===================================================== */
+      
+      /**
+       * Toggles the user dropdown menu (avatar menu)
+       */
+      function toggleUserMenu() {
+        document.getElementById("userMenu")?.classList.toggle("hidden");
+      }
+      
+      /**
+       * Close the user menu when clicking anywhere outside
+       */
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".relative")) {
+          document.getElementById("userMenu")?.classList.add("hidden");
+        }
+      });
+
+      function closeUserMenu() {
+  document.getElementById("userMenu")?.classList.add("hidden");
+}
+
+      
+      
+      /* =====================================================
+         SETTINGS MODAL
+         ===================================================== */
+      
+      /**
+       * Opens the settings modal and loads content via fetch
+       */
+      function openSettings() {
+        const overlay = document.getElementById("settingsOverlay");
+        const content = document.getElementById("settingsContent");
+      
+        document.getElementById("userMenu")?.classList.add("hidden");
+        overlay?.classList.remove("hidden");
+        overlay?.classList.add("flex");
+      
+        // Load settings HTML from backend
+        fetch("/account?modal=1")
+          .then(res => res.text())
+          .then(html => {
+            if (!content) return;
+            content.innerHTML = html;
+            initializeSettingsNav();
+            initializeThemeRadios();
+          });
+      }
+      
+      /**
+       * Closes settings modal and clears content
+       */
+      function closeSettings() {
+        document.getElementById("settingsOverlay")?.classList.add("hidden");
+        const content = document.getElementById("settingsContent");
+        if (content) content.innerHTML = "";
+      }
+      
+      
+      /* =====================================================
+         CREATE LIST MODAL
+         ===================================================== */
+      
+         function openCreateListModal() {
+  const overlay = document.getElementById("createListOverlay");
+  if (!overlay) return;
+
+  overlay.classList.remove("hidden");
+
+  // ✅ Focus the input after opening
+  const input = overlay.querySelector("input[name='name']");
+  input?.focus();
+}
+
+
+      
+function closeCreateListModal() {
+  const overlay = document.getElementById("createListOverlay");
+  if (!overlay) return;
+
+  overlay.classList.add("hidden");
+
+  const input = overlay.querySelector("input[name='name']");
+  if (input) input.value = "";
+}
+
+      
+      
+      /* =====================================================
+         LIST ACTION MENU (⋮ per list)
+         ===================================================== */
+      
+      /**
+       * Toggles the 3-dot menu for a specific list
+       */
+       function toggleListMenu(id) {
+  // Close all other open list menus
+  document.querySelectorAll("[id^='listMenu-']").forEach(menu => {
+    menu.classList.add("hidden");
+  });
+
+  // Toggle the clicked one
+  const menu = document.getElementById(`listMenu-${id}`);
+  menu?.classList.toggle("hidden");
+}
+
+/* =====================================================
+   CLOSE LIST MENUS ON OUTSIDE CLICK
+   ===================================================== */
+   document.addEventListener("click", (e) => {
+  // If click is inside a list menu or its button, do nothing
+  if (e.target.closest(".list-menu-wrapper")) return;
+
+  // Otherwise close all list menus
+  document.querySelectorAll("[id^='listMenu-']").forEach(menu => {
+    menu.classList.add("hidden");
+  });
+});
+
+
+      
+      
+      /* =====================================================
+         RENAME LIST MODAL
+         ===================================================== */
+      
+      /**
+       * Opens rename modal and dynamically updates:
+       * - input value
+       * - form action URL
+       */
+       function openRenameListModal(id, name) {
+  // Close any open list menus
+  document.querySelectorAll("[id^='listMenu-']").forEach(menu => {
+    menu.classList.add("hidden");
+  });
+
+  const overlay = document.getElementById("renameListOverlay");
+  if (!overlay) return;
+
+  const input = overlay.querySelector("input[name='name']");
+
+  input.value = name;
+  overlay.querySelector("form").action = `/lists/rename/${id}`;
+  overlay.classList.remove("hidden");
+
+  // ✅ Focus input after modal opens
+  input.focus();
+}
+      
+function closeRenameListModal() {
+  document.getElementById("renameListOverlay")?.classList.add("hidden");
+}
+
+      
+      
+      /* =====================================================
+         DELETE LIST MODAL
+         ===================================================== */
+      
+      /**
+       * Opens delete confirmation modal
+       * and updates the form action dynamically
+       */
+      function openDeleteListModal(id) {
+        document.querySelectorAll("[id^='listMenu-']").forEach(menu => {
+          menu.classList.add("hidden");
+        });
+
+        const overlay = document.getElementById("deleteListOverlay");
+        if (!overlay) return;
+      
+        overlay.querySelector("form").action = `/lists/delete/${id}`;
+        overlay.classList.remove("hidden");
+      }
+      
+      function closeDeleteListModal() {
+        document.getElementById("deleteListOverlay")?.classList.add("hidden");
+      }
+      
+      
+      /* =====================================================
+         PROFILE IMAGE UPLOAD
+         ===================================================== */
+      
+      /**
+       * Uploads profile image via fetch (AJAX)
+       * Reloads page after success
+       */
+      function uploadProfileImage(input) {
+        if (!input.files || !input.files[0]) return;
+      
+        const formData = new FormData();
+        formData.append("profile_image", input.files[0]);
+      
+        fetch("/upload_profile", {
+          method: "POST",
+          body: formData
+        }).then(() => location.reload());
+      }
+      
+      
+      /* =====================================================
+         SETTINGS NAVIGATION (Tabs inside modal)
+         ===================================================== */
+      
+      /**
+       * Shows a specific settings section
+       * and highlights the active nav button
+       */
+      function showSection(id, btn) {
+        const overlay = document.getElementById("settingsOverlay");
+        if (!overlay) return;
+      
+        overlay.querySelectorAll(".settings-section")
+          .forEach(section => section.classList.add("hidden"));
+      
+        overlay.querySelector(`#${id}`)?.classList.remove("hidden");
+      
+        overlay.querySelectorAll(".nav-btn").forEach(button => {
+          button.classList.remove("bg-[#3a3a3a]", "text-white");
+          button.classList.add("text-gray-300");
+        });
+      
+        btn?.classList.add("bg-[#3a3a3a]", "text-white");
+      }
+      
+      /**
+       * Initializes default active settings tab
+       */
+      function initializeSettingsNav() {
+        const overlay = document.getElementById("settingsOverlay");
+        const firstBtn = overlay?.querySelector(".nav-btn");
+      
+        if (firstBtn) {
+          showSection(firstBtn.dataset.section || "account", firstBtn);
+        }
+      }
+      
+      
+      /* =====================================================
+         THEME SELECTION (Light / Dark / System)
+         ===================================================== */
+      
+      function initializeThemeRadios() {
+        const radios = document.querySelectorAll('input[name="theme"]');
+        if (!radios.length) return;
+      
+        const savedTheme =
+          window.ThemeManager?.theme ||
+          localStorage.getItem("theme") ||
+          "system";
+      
+        radios.forEach(radio => {
+          radio.checked = radio.value === savedTheme;
+      
+          radio.addEventListener("change", () => {
+            if (window.ThemeManager?.setTheme) {
+              ThemeManager.setTheme(radio.value);
+            } else {
+              localStorage.setItem("theme", radio.value);
+              document.documentElement.classList.toggle(
+                "dark",
+                radio.value === "dark" ||
+                (radio.value === "system" &&
+                  window.matchMedia("(prefers-color-scheme: dark)").matches)
+              );
+            }
+          });
+        });
+      }
+      
+      
+      /* =====================================================
+         ESC KEY HANDLER (Global)
+         ===================================================== */
+      
+      /**
+       * Handles ESC key:
+       * 1. Close settings modal if open
+       * 2. Otherwise collapse sidebar
+       */
+       document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+
+  // 1️⃣ Rename List Modal
+  const renameOpen =
+    !document.getElementById("renameListOverlay")?.classList.contains("hidden");
+
+  if (renameOpen) {
+    closeRenameListModal();
+    return;
+  }
+
+  // 2️⃣ Delete List Modal
+  const deleteOpen =
+    !document.getElementById("deleteListOverlay")?.classList.contains("hidden");
+
+  if (deleteOpen) {
+    closeDeleteListModal();
+    return;
+  }
+
+
+  // 3️⃣ Create List Modal
+  if (!document.getElementById("createListOverlay")?.classList.contains("hidden")) {
+    closeCreateListModal();
+    return;
+  }
+
+
+  // 3️⃣ Settings Modal
+  const settingsOpen =
+    !document.getElementById("settingsOverlay")?.classList.contains("hidden");
+
+  if (settingsOpen) {
+    closeSettings();
+    return;
+  }
+
+    // 5️⃣ User dropdown (avatar menu)
+    if (!document.getElementById("userMenu")?.classList.contains("hidden")) {
+    closeUserMenu();
+    return;
+  }
+
+
+  // 4️⃣ Close any open list menus (⋮)
+  document.querySelectorAll("[id^='listMenu-']").forEach(menu => {
+    menu.classList.add("hidden");
+  });
+
+});
+
+      
+      /* =====================================================
+         TASK LIST COLLAPSE (Sidebar lists)
+         ===================================================== */
+      
+      /**
+       * Expands / collapses task list group in sidebar
+       */
+      function toggleTaskLists() {
+        const list = document.getElementById("taskLists");
+        const chevron = document.getElementById("tasksChevron");
+      
+        if (!list || !chevron) return;
+      
+        list.classList.toggle("hidden");
+        chevron.classList.toggle("rotate-90");
+      }
+
+      /* =====================================================
+         NOTES SIDEBAR (Mobile reset to root)
+         ===================================================== */
+
+      (function initNotesNavMobileReset() {
+        const notesLink = document.getElementById("notesNavLink");
+        if (!notesLink) return;
+
+        const mobileQuery = window.matchMedia("(max-width: 767px)");
+        const desktopHref =
+          notesLink.getAttribute("data-desktop-href") || "/notes";
+        const mobileHref =
+          notesLink.getAttribute("data-mobile-href") || "/notes?view=root";
+
+        function syncNotesLinkHref() {
+          const nextHref = mobileQuery.matches ? mobileHref : desktopHref;
+          notesLink.setAttribute("href", nextHref);
+        }
+
+        notesLink.addEventListener("click", (event) => {
+          if (!mobileQuery.matches) return;
+          event.preventDefault();
+          window.location.href = mobileHref;
+        });
+
+        syncNotesLinkHref();
+        mobileQuery.addEventListener("change", syncNotesLinkHref);
+      })();
+
+      /* =====================================================
+         DRAG-AND-DROP LIST REORDERING
+         ===================================================== */
+
+let draggedCard = null;
+
+document.addEventListener("dragstart", (e) => {
+  if (!e.target.classList.contains("list-card")) return;
+  draggedCard = e.target;
+  e.target.classList.add("opacity-50");
+});
+
+document.addEventListener("dragend", (e) => {
+  if (!draggedCard) return;
+  draggedCard.classList.remove("opacity-50");
+  draggedCard = null;
+  saveListOrder();
+});
+
+document.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  const target = e.target.closest(".list-card");
+  if (!target || target === draggedCard) return;
+
+  const container = document.getElementById("listsContainer");
+  const cards = [...container.children];
+  const draggedIndex = cards.indexOf(draggedCard);
+  const targetIndex = cards.indexOf(target);
+
+  if (draggedIndex < targetIndex) {
+    container.insertBefore(draggedCard, target.nextSibling);
+  } else {
+    container.insertBefore(draggedCard, target);
+  }
+});
+
+function saveListOrder() {
+  const order = [...document.querySelectorAll(".list-card")]
+    .map(card => card.dataset.id);
+
+  fetch("/lists/reorder", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ order })
+  });
+}
+
+</script>
+
+    
+      
+      
+  </body>
+</html>

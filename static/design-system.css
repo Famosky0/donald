@@ -1,0 +1,76 @@
+/* =====================
+   TASKFLOW DESIGN SYSTEM
+   ===================== */
+
+   :root {
+    /* Colors */
+    --tf-bg: #000000;
+    --tf-surface: #0C0E37;
+    --tf-border: #6C6C6C;
+  
+    --tf-primary: #DBDBDB;
+    --tf-accent: #611C1C;
+  
+    --tf-text-main: #FFFFFF;
+    --tf-text-muted: #8A8F98;
+  
+    /* Fonts */
+    --tf-font-main: 'Inter', sans-serif;
+    --tf-font-alt: 'Inria Sans', sans-serif;
+  }
+  /* ===== TYPOGRAPHY ===== */
+  .tf-h1 {
+    font-family: var(--tf-font-main);
+    font-size: 64px;
+    font-weight: 800;
+    font-style: italic;
+    color: var(--tf-text-main);
+  }
+  
+  .tf-h2 {
+    font-family: var(--tf-font-main);
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--tf-text-muted);
+  }
+  
+  .tf-body {
+    font-family: var(--tf-font-main);
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--tf-text-muted);
+    line-height: 1.6;
+  }
+  
+  .tf-quote {
+    font-family: var(--tf-font-alt);
+    font-size: 18px;
+    color: #ADADAD;
+  }
+  
+  /* ===== BUTTONS ===== */
+  .tf-btn-primary {
+    background-color: var(--tf-primary);
+    color: #000;
+    border-radius: 10px;
+    height: 38px;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 0 20px;
+    transition: background 0.2s;
+  }
+  
+  .tf-btn-primary:hover {
+    background-color: #c7c7c7;
+  }
+  
+  .tf-btn-secondary {
+    background-color: var(--tf-accent);
+    color: #C6C6C6;
+    border-radius: 10px;
+    height: 38px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0 20px;
+  }
+  

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create your TaskFlow account</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen overflow-hidden bg-gradient-to-b from-[#F9FAFB] to-[#F3F4F6]">
+
+<!-- Header -->
+<header class="fixed top-0 left-0 w-full h-16 z-50
+               flex items-center justify-between px-8
+               bg-white/80 backdrop-blur
+               border-b border-gray-200">
+
+  <a href="/" class="flex items-center gap-2 text-gray-900">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full" />
+    <span class="font-semibold tracking-tight">TaskFlow</span>
+  </a>
+
+  <div class="flex items-center gap-3 text-sm">
+    <span class="hidden md:block text-gray-500">Already have an account?</span>
+    <a href="/login" class="text-blue-600 font-medium hover:text-blue-700 transition">
+      Sign in
+    </a>
+  </div>
+</header>
+
+<!-- Page -->
+<main class="mt-16 min-h-[calc(100vh-4rem)] px-6 flex items-center justify-center">
+  <div class="w-full max-w-[420px]">
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl border border-gray-200
+                shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+
+      <div class="px-8 py-8">
+
+        <!-- Heading -->
+        <div class="mb-6 text-center">
+          <h1 class="text-2xl font-semibold tracking-tight">
+            Create your account
+          </h1>
+          <p class="mt-1 text-sm text-gray-500">
+            Start organizing your day with clarity
+          </p>
+        </div>
+
+        <!-- Form -->
+        <form action="/register" method="POST" class="space-y-4">
+
+          <!-- Name -->
+          <div class="flex gap-3">
+            <input
+              class="w-1/2 rounded-lg border border-gray-200 px-3 py-2.5 text-sm
+                     focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500"
+              type="text"
+              name="first_name"
+              id="f_name"
+              placeholder="First name"
+              required
+            />
+            <input
+              class="w-1/2 rounded-lg border border-gray-200 px-3 py-2.5 text-sm
+                     focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500"
+              type="text"
+              name="last_name"
+              id="l_name"
+              placeholder="Last name"
+              required
+            />
+          </div>
+
+          <!-- Username / Email -->
+          <div class="relative">
+            <input
+              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm
+                     focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500"
+              type="text"
+              name="identifier"
+              id="identifier"
+              placeholder="Username or email"
+              autocomplete="off"
+              required
+            />
+
+            <!-- Suggestions -->
+            <div
+              id="username_suggestions"
+              class="absolute left-0 top-full mt-2 w-full hidden
+                     rounded-xl border border-gray-200 bg-white shadow-lg
+                     p-3 text-sm text-gray-700 z-20">
+            </div>
+
+            {% if error_identifier %}
+            <p class="mt-2 text-sm text-red-500">
+              {{ error_identifier }}
+            </p>
+            {% endif %}
+          </div>
+
+          <!-- Password -->
+          <div>
+            <input
+              class="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm
+                     focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+              required
+            />
+            <p class="mt-1 text-xs text-gray-500">
+              At least 8 characters recommended
+            </p>
+
+            {% if error_password %}
+            <p class="mt-1 text-sm text-red-500">
+              {{ error_password }}
+            </p>
+            {% endif %}
+          </div>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-blue-600 py-2.5 text-sm font-medium text-white
+                   hover:bg-blue-700 active:scale-[0.99]
+                   focus:outline-none focus:ring-2 focus:ring-blue-500/40
+                   transition">
+            Create account
+          </button>
+
+          <!-- Legal -->
+          <p class="text-xs text-gray-500 leading-relaxed text-center">
+            By creating an account, you agree to our
+            <a href="/terms" class="underline underline-offset-2 hover:text-blue-600">Terms</a>
+            and
+            <a href="/privacy" class="underline underline-offset-2 hover:text-blue-600">Privacy Policy</a>.
+          </p>
+
+          <!-- Divider -->
+          <div class="flex items-center gap-3 py-2">
+            <div class="h-px flex-1 bg-gray-200"></div>
+            <span class="text-xs text-gray-400">OR</span>
+            <div class="h-px flex-1 bg-gray-200"></div>
+          </div>
+
+          <!-- Google -->
+          <a
+            href="/login/google"
+            class="w-full flex items-center justify-center gap-3
+                   rounded-lg border border-gray-200 py-2.5
+                   text-sm font-medium text-gray-700
+                   hover:bg-gray-50 transition">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                 class="w-5 h-5" />
+            Continue with Google
+          </a>
+
+          <!-- Apple -->
+          <button
+            type="button"
+            class="w-full flex items-center justify-center gap-3
+                   rounded-lg border border-gray-200 py-2.5
+                   text-sm font-medium text-gray-700
+                   hover:bg-gray-50 transition">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16.365 1.43c0 1.14-.42 2.2-1.24 3.03-.82.82-2.1 1.45-3.28 1.36-.15-1.1.35-2.24 1.17-3.06.82-.86 2.16-1.48 3.35-1.33zM20.1 17.4c-.5 1.1-.73 1.6-1.37 2.58-.9 1.36-2.17 3.05-3.75 3.07-1.4.02-1.76-.92-3.65-.9-1.9.02-2.3.92-3.7.9-1.58-.02-2.78-1.55-3.68-2.9-2.02-3.05-2.23-6.63-1-8.5.88-1.35 2.3-2.14 3.63-2.14 1.4 0 2.27.97 3.65.97 1.35 0 2.17-.97 3.65-.97 1.18 0 2.43.65 3.3 1.78-2.9 1.6-2.43 5.77.97 7.1z"/>
+            </svg>
+            Continue with Apple
+          </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+    
+    <script>
+        const fNameInput = document.getElementById("f_name");
+        const lNameInput = document.getElementById("l_name");
+        const identifierInput = document.getElementById("identifier");
+        const suggestionsDiv = document.getElementById("username_suggestions");
+        
+        let identifierTimeout = null;
+        let suggestionTimeout = null;
+        let activeIndex = -1;
+        
+        // ---------- availability check ----------
+        const errorEl = document.createElement("p");
+        errorEl.className = "text-red-500 text-sm mt-2";
+        identifierInput.parentNode.appendChild(errorEl);
+        
+        identifierInput.addEventListener("input", () => {
+            suggestionsDiv.classList.add("hidden");
+            activeIndex = -1;
+        
+            clearTimeout(identifierTimeout);
+            identifierTimeout = setTimeout(() => {
+                const value = identifierInput.value.trim();
+                if (!value) {
+                    errorEl.textContent = "";
+                    return;
+                }
+        
+                const formData = new FormData();
+                formData.append("identifier", value);
+        
+                fetch("/check-identifier", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    errorEl.textContent = data.exists
+                        ? "Username or email already exists"
+                        : "";
+                });
+            }, 400);
+        });
+        
+        // ---------- username suggestions ----------
+        function fetchUsernameSuggestions() {
+            const first = fNameInput.value.trim();
+            const last = lNameInput.value.trim();
+        
+            if (!first || !last) {
+                suggestionsDiv.classList.add("hidden");
+                return;
+            }
+        
+            const formData = new FormData();
+            formData.append("first_name", first);
+            formData.append("last_name", last);
+        
+            fetch("/username_suggestions", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.suggestions.length) {
+                    suggestionsDiv.classList.add("hidden");
+                    return;
+                }
+        
+                suggestionsDiv.innerHTML = `
+                    <p class="mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                        Suggestions
+                    </p>
+                    ${data.suggestions.map(
+                        (s, i) => `
+                        <div
+                            class="suggestion-item cursor-pointer rounded-md px-2 py-1 hover:bg-gray-100"
+                            data-index="${i}"
+                            data-value="${s}"
+                        >${s}</div>`
+                    ).join("")}
+                `;
+        
+                suggestionsDiv.classList.remove("hidden");
+        
+                suggestionsDiv.querySelectorAll(".suggestion-item").forEach(el => {
+                    el.addEventListener("click", () => {
+                        selectSuggestion(el.dataset.value);
+                    });
+                });
+            });
+        }
+        
+        // ---------- keyboard navigation ----------
+        identifierInput.addEventListener("keydown", (e) => {
+            const items = suggestionsDiv.querySelectorAll(".suggestion-item");
+            if (!items.length) return;
+        
+            if (e.key === "ArrowDown") {
+                e.preventDefault();
+                activeIndex = (activeIndex + 1) % items.length;
+            } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                activeIndex = (activeIndex - 1 + items.length) % items.length;
+            } else if (e.key === "Enter" && activeIndex >= 0) {
+                e.preventDefault();
+                selectSuggestion(items[activeIndex].dataset.value);
+                return;
+            }
+        
+            items.forEach((el, i) => {
+                el.classList.toggle("bg-gray-100", i === activeIndex);
+            });
+        });
+        
+        function selectSuggestion(value) {
+            identifierInput.value = value;
+            identifierInput.dispatchEvent(new Event("input"));
+            suggestionsDiv.classList.add("hidden");
+        }
+        
+        // ---------- debounce name input ----------
+        [fNameInput, lNameInput].forEach(input => {
+            input.addEventListener("input", () => {
+                clearTimeout(suggestionTimeout);
+                suggestionTimeout = setTimeout(fetchUsernameSuggestions, 300);
+            });
+        });
+        </script>
+        
+        
+    
+</body>
+</html>

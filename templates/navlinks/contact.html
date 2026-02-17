@@ -1,0 +1,716 @@
+<!<!DOCTYPE html>
+<html lang="en" class="scrollbar-hide">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskFlow | Productivity</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!- Fonts>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@400&display=swap" rel="stylesheet">
+
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='design-system.css') }}">--> 
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+
+  
+  
+  
+</head>
+
+<body class="scrollbar-hide">
+
+  <header class="fixed top-0 left-0 w-full h-[72px] z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+
+    <div class="max-w-none mx-auto h-full flex items-center justify-between px-6 md:px-10">
+  
+      <!-- Left -->
+      <div class="flex items-center gap-10">
+        <a href="/" class="flex items-center gap-2 text-gray-900">
+          <img src="{{ url_for('static', filename='images/logo.png') }}"
+               class="w-8 h-8 rounded-full">
+          <span class="font-semibold tracking-tight">TaskFlow</span>
+        </a>
+  
+        <nav class="hidden md:flex gap-10 text-sm">
+          <a href="/features" class="text-gray-600 hover:text-gray-900 transition">
+            Features
+          </a>
+          <a href="/premium" class="text-gray-600 hover:text-gray-900 transition">
+            Premium
+          </a>
+          <a href="/pricing" class="text-gray-600 hover:text-gray-900 transition">
+            Pricing
+          </a>
+          <a href="/about" class="text-gray-600 hover:text-gray-900 transition">
+            About
+          </a>
+        </nav>
+      </div>
+  
+      <!-- Right -->
+      <div class="flex items-center gap-6">
+        <div class="hidden md:block h-6 w-px bg-gray-200"></div>
+  
+        <div class="hidden md:flex gap-4">
+          <a href="/login"
+             class="text-gray-600 hover:text-gray-900 px-4 py-2 transition">
+            Log in
+          </a>
+          <a href="/register"
+             class="bg-black text-white px-4 py-2 rounded-md font-semibold hover:bg-black/90 transition">
+            Sign up
+          </a>
+        </div>
+      </div>
+  
+      <!-- Mobile Menu Button -->
+      <button id="menuOpen" class="md:hidden text-gray-900 text-2xl">
+        ☰
+      </button>
+  
+    </div>
+  </header>
+  
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobileMenu"
+  class="fixed inset-0 z-[60] bg-white text-gray-900 translate-x-full transition-transform duration-300 ease-out">
+  
+
+<!-- Top Bar -->
+<div class="h-[72px] flex items-center justify-between px-6 border-b border-white/10">
+  <a href="/" class="flex items-center gap-2 text-white">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full">
+    <span class="font-semibold tracking-tight">TaskFlow</span>
+  </a>
+
+<button id="menuClose" class="text-2xl">✕</button>
+</div>
+
+<!-- Menu Content -->
+<div class="px-6 py-8 flex flex-col gap-6 text-base">
+
+  <a href="/pricing" class="text-gray-700 hover:text-gray-900">Pricing</a>
+  <a href="/blog" class="text-gray-700 hover:text-gray-900">Blog</a>
+  <a href="/features" class="text-gray-700 hover:text-gray-900">Features</a>
+  
+<details class="group">
+ <summary class="cursor-pointer text-white/80 hover:text-white">
+   More
+ </summary>
+ <div class="mt-4 ml-4 flex flex-col gap-3 text-white/60">
+   <a href="/contact">Contact</a>
+   <a href="/about">About</a>
+ </div>
+</details>
+
+<div class="mt-8 flex flex-col gap-4">
+ <a href="/register"
+    class="w-full text-center bg-white text-gray-900 py-3 rounded-md font-semibold">
+   Sign up
+ </a>
+ <a href="/login"
+    class="w-full text-center border border-white/20 py-3 rounded-md">
+   Log in
+ </a>
+</div>
+</div>
+</div>
+
+<!-- LET'S TALK -->
+<section class="w-full bg-white text-gray-900 px-6 md:px-[64px] py-[144px]">
+
+  <div class="max-w-[960px] mx-auto text-center flex flex-col items-center gap-6">
+
+    <!-- Eyebrow -->
+    <p class="text-sm font-medium text-gray-500">
+      Connect
+    </p>
+
+    <!-- Heading -->
+    <h1 class="text-[44px] md:text-[52px]
+               leading-[1.1]
+               tracking-tight
+               font-bold">
+      Let’s talk
+    </h1>
+
+    <!-- Subtext -->
+    <p class="text-base md:text-lg text-gray-600 max-w-[640px]">
+      We’re here to help you build better days, one task at a time.
+    </p>
+
+    <!-- CTAs -->
+    <div class="flex items-center gap-4 mt-6">
+
+      <!-- Primary -->
+      <a
+        href="#contact-form"
+        class="bg-black text-white
+               px-6 py-3 rounded-md
+               font-semibold
+               hover:bg-black/90 transition"
+      >
+        Message
+      </a>
+
+      <!-- Secondary -->
+      <a
+        href="/features"
+        class="border border-gray-300
+               text-gray-900
+               px-6 py-3 rounded-md
+               font-semibold
+               hover:border-gray-400 transition"
+      >
+        Learn
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- GET IN TOUCH -->
+<section class="w-full bg-white text-gray-900 px-6 md:px-[64px] py-[144px]">
+
+  <div class="max-w-[1200px] mx-auto">
+
+    <!-- Header -->
+    <div class="max-w-[640px] mb-16">
+      <p class="text-sm font-medium text-gray-500 mb-3">
+        Reach
+      </p>
+
+      <h2 class="text-[36px] md:text-[44px]
+                 leading-[1.15]
+                 font-bold tracking-tight mb-4">
+        Get in touch
+      </h2>
+
+      <p class="text-base md:text-lg text-gray-600">
+        We respond to every message and take your feedback seriously.
+      </p>
+    </div>
+
+    <!-- Contact Methods -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+
+      <!-- Email -->
+      <div class="flex flex-col gap-4">
+        <div class="w-10 h-10 flex items-center justify-center rounded-md bg-gray-100">
+          ✉️
+        </div>
+
+        <h3 class="text-lg font-semibold">
+          Email
+        </h3>
+
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Send us a message and we’ll get back to you within hours.
+        </p>
+
+        <a
+          href="mailto:hello@taskflow.io"
+          class="text-sm font-medium text-gray-900 hover:underline"
+        >
+          hello@taskflow.io
+        </a>
+      </div>
+
+      <!-- Phone -->
+      <div class="flex flex-col gap-4">
+        <div class="w-10 h-10 flex items-center justify-center rounded-md bg-gray-100">
+          📞
+        </div>
+
+        <h3 class="text-lg font-semibold">
+          Phone
+        </h3>
+
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Call us during business hours if you need immediate help.
+        </p>
+
+        <a
+          href="tel:+14155550147"
+          class="text-sm font-medium text-gray-900 hover:underline"
+        >
+          +1 (415) 555-0147
+        </a>
+      </div>
+
+      <!-- Office -->
+      <div class="flex flex-col gap-4">
+        <div class="w-10 h-10 flex items-center justify-center rounded-md bg-gray-100">
+          📍
+        </div>
+
+        <h3 class="text-lg font-semibold">
+          Office
+        </h3>
+
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Visit us in person or send mail to our headquarters.
+        </p>
+
+        <p class="text-sm font-medium text-gray-900">
+          San Francisco, California 94105 US
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- DROP A LINE -->
+<section id="contact-form" class="w-full bg-white text-gray-900 px-6 md:px-[64px] py-[144px]">
+
+  <div class="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
+
+    <!-- Left: Context -->
+    <div class="flex flex-col gap-6 max-w-[480px]">
+
+      <p class="text-sm font-medium text-gray-500">
+        Send
+      </p>
+
+      <h2 class="text-[36px] md:text-[44px] font-bold tracking-tight leading-[1.15]">
+        Drop a line
+      </h2>
+
+      <p class="text-base md:text-lg text-gray-600">
+        Tell us what’s on your mind. Whether it’s feedback, support, or a question
+        about TaskFlow, we’ll point you in the right direction.
+      </p>
+
+      <div class="flex flex-col gap-3 text-sm text-gray-700 mt-4">
+        <div class="flex items-center gap-2">
+          ✉️ <span>hello@taskflow.io</span>
+        </div>
+        <div class="flex items-center gap-2">
+          📞 <span>+1 (415) 555-0147</span>
+        </div>
+        <div class="flex items-center gap-2">
+          📍 <span>San Francisco, California 94105 US</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right: Form -->
+    <form class="w-full">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- First name -->
+        <div>
+          <label class="block text-sm font-medium mb-2">First name</label>
+          <input
+            type="text"
+            class="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black"
+          />
+        </div>
+
+        <!-- Last name -->
+        <div>
+          <label class="block text-sm font-medium mb-2">Last name</label>
+          <input
+            type="text"
+            class="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black"
+          />
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block text-sm font-medium mb-2">Email</label>
+          <input
+            type="email"
+            class="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black"
+          />
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label class="block text-sm font-medium mb-2">Phone number</label>
+          <input
+            type="tel"
+            class="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black"
+          />
+        </div>
+
+        <!-- Topic -->
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-2">What’s this about?</label>
+          <select
+            class="w-full border border-gray-300 rounded-md px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-black"
+          >
+            <option>Select one…</option>
+            <option>Product feedback</option>
+            <option>Support</option>
+            <option>Pricing / plans</option>
+            <option>Partnership</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <!-- Usage -->
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-4">
+            How do you use TaskFlow?
+          </label>
+
+          <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+            <label class="flex items-center gap-2">
+              <input type="radio" name="role"> Student
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="role"> Creator
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="role"> Builder
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="role"> Team lead
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="role"> Researcher
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" name="role"> Other
+            </label>
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-2">Message</label>
+          <textarea
+            rows="5"
+            placeholder="Tell us more…"
+            class="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black"
+          ></textarea>
+        </div>
+
+        <!-- Consent -->
+        <div class="md:col-span-2 flex items-center gap-2 text-sm text-gray-700">
+          <input type="checkbox">
+          <span>I agree to the terms</span>
+        </div>
+
+        <!-- Submit -->
+        <div class="md:col-span-2">
+          <button
+            type="submit"
+            class="bg-black text-white px-6 py-3 rounded-md font-semibold hover:bg-black/90 transition"
+          >
+            Send
+          </button>
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</section>
+
+<!-- QUESTIONS -->
+<section class="w-full bg-white text-gray-900 px-6 md:px-[64px] py-[144px]">
+
+  <div class="max-w-[1200px] mx-auto">
+
+    <!-- Header -->
+    <div class="text-center max-w-[640px] mx-auto mb-20">
+      <h2 class="text-[36px] md:text-[44px] font-bold tracking-tight mb-4">
+        Questions
+      </h2>
+      <p class="text-base md:text-lg text-gray-600">
+        Find answers to the most common questions about TaskFlow
+      </p>
+    </div>
+
+    <!-- FAQ Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Item -->
+      <details class="group border border-gray-300 rounded-md p-6">
+        <summary class="flex items-center justify-between cursor-pointer font-medium text-gray-900">
+          How does TaskFlow work?
+          <span class="text-gray-400 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-4 text-sm text-gray-600 leading-relaxed">
+          TaskFlow gives you a single Today page that shows your plan, priorities,
+          and next actions. The AI learns your patterns and helps you focus on what
+          matters most each day.
+        </p>
+      </details>
+
+      <details class="group border border-gray-300 rounded-md p-6">
+        <summary class="flex items-center justify-between cursor-pointer font-medium">
+          Can I customize my workspace?
+          <span class="text-gray-400 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-4 text-sm text-gray-600">
+          Absolutely. You can organize tasks, habits, and reflections in a way that
+          fits your workflow. TaskFlow adapts to how you think.
+        </p>
+      </details>
+
+      <details class="group border border-gray-300 rounded-md p-6">
+        <summary class="flex items-center justify-between cursor-pointer font-medium">
+          Can I import my existing tasks?
+          <span class="text-gray-400 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-4 text-sm text-gray-600">
+          Yes. TaskFlow supports imports from most productivity tools so you don’t
+          lose momentum when switching.
+        </p>
+      </details>
+
+      <details class="group border border-gray-300 rounded-md p-6">
+        <summary class="flex items-center justify-between cursor-pointer font-medium">
+          How does the AI help?
+          <span class="text-gray-400 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-4 text-sm text-gray-600">
+          The AI watches what you complete and what you skip, then suggests realistic
+          priorities so you build momentum without burnout.
+        </p>
+      </details>
+
+      <details class="group border border-gray-300 rounded-md p-6">
+        <summary class="flex items-center justify-between cursor-pointer font-medium">
+          Is my data secure?
+          <span class="text-gray-400 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-4 text-sm text-gray-600">
+          Your data is encrypted and stored securely. We take privacy seriously and
+          never sell your information.
+        </p>
+      </details>
+
+      <details class="group border border-gray-300 rounded-md p-6">
+        <summary class="flex items-center justify-between cursor-pointer font-medium">
+          Does TaskFlow work offline?
+          <span class="text-gray-400 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-4 text-sm text-gray-600">
+          Yes. TaskFlow works offline and syncs automatically once you’re back online.
+        </p>
+      </details>
+
+      <details class="group border border-gray-300 rounded-md p-6">
+        <summary class="flex items-center justify-between cursor-pointer font-medium">
+          Is there a free plan?
+          <span class="text-gray-400 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-4 text-sm text-gray-600">
+          Yes. You can start free and upgrade anytime when you want deeper insights
+          and smarter AI guidance.
+        </p>
+      </details>
+
+      <details class="group border border-gray-300 rounded-md p-6">
+        <summary class="flex items-center justify-between cursor-pointer font-medium">
+          Can teams use TaskFlow?
+          <span class="text-gray-400 group-open:rotate-45 transition">+</span>
+        </summary>
+        <p class="mt-4 text-sm text-gray-600">
+          TaskFlow is built for individuals today. Team features are coming based on
+          user feedback.
+        </p>
+      </details>
+
+    </div>
+
+<!-- Footer CTA -->
+<div class="mt-20 flex flex-col items-center gap-4 text-center">
+
+  <h3 class="text-[32px] md:text-[40px] font-bold tracking-tight text-gray-900 mb-3">
+    Didn’t find what you need?
+  </h3>
+
+  <p class="text-base md:text-lg text-gray-600 mb-8">
+    Reach out directly and we’ll help
+  </p>
+
+  <a
+    href="#contact-form"
+    class="inline-flex items-center justify-center
+           border border-gray-900
+           px-8 py-3
+           rounded-md
+           font-medium
+           text-gray-900
+           hover:bg-gray-900 hover:text-white
+           transition"
+  >
+    Contact
+  </a>
+
+</div>
+
+
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer class="w-full bg-white text-gray-900 px-6 md:px-[64px] pt-[120px] pb-12">
+
+  <div class="max-w-[1200px] mx-auto">
+
+    <!-- Top Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+
+      <!-- Brand -->
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-2 font-semibold text-lg">
+          <img src="{{ url_for('static', filename='images/logo.png') }}" class="w-8 h-8 rounded-full" />
+          TaskFlow
+        </div>
+
+        <div class="text-sm text-gray-600">
+          <p class="font-medium text-gray-900 mb-1">Address</p>
+          <p>San Francisco, California 94105</p>
+        </div>
+
+        <div class="text-sm text-gray-600">
+          <p class="font-medium text-gray-900 mb-1">Contact</p>
+          <p>1 (844) 827-5435</p>
+          <p>hello@taskflow.io</p>
+        </div>
+
+        <!-- Socials -->
+        <div class="flex items-center gap-4 mt-2 text-gray-600">
+           <!-- Facebook -->
+  <a href="#" aria-label="Facebook" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-3h2.4V9.5c0-2.4 1.4-3.7 3.6-3.7
+               1 0 2 .2 2 .2v2.3h-1.1c-1.1 0-1.4.7-1.4 1.4V12H16l-.4 3h-2.5v7A10
+               10 0 0 0 22 12z"/>
+    </svg>
+  </a>
+
+  <!-- Instagram -->
+  <a href="#" aria-label="Instagram" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2
+               5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3
+               3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5
+               3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0
+               2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4.5-.9a1.1
+               1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2z"/>
+    </svg>
+  </a>
+
+  <!-- X / Twitter -->
+  <a href="#" aria-label="X" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M18.3 2H21l-6.6 7.6L22 22h-6.6l-5.2-6.8L4.6 22H2l7.1-8.2
+               L2 2h6.8l4.7 6.2L18.3 2zm-2.3 18h1.5L8.2
+               4H6.6l9.4 16z"/>
+    </svg>
+  </a>
+
+  <!-- LinkedIn -->
+  <a href="#" aria-label="LinkedIn" class="hover:text-white transition">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M4.98 3.5A2.5 2.5 0 1 0 5 8a2.5 2.5
+               0 0 0-.02-4.5zM3 9h4v12H3V9zm7
+               0h3.8v1.6h.1c.5-.9 1.7-1.8
+               3.6-1.8 3.9 0 4.6 2.5
+               4.6 5.8V21h-4v-5.3c0-1.3
+               0-3-1.9-3s-2.2 1.4-2.2
+               2.9V21h-4V9z"/>
+    </svg>
+  </a>
+        </div>
+      </div>
+
+      <!-- Column 1 -->
+      <div class="text-sm">
+        <p class="font-medium mb-4">Home</p>
+        <ul class="space-y-3 text-gray-600">
+          <li><a href="/" class="hover:text-black">Home</a></li>
+          <li><a href="/features" class="hover:text-black">Features</a></li>
+          <li><a href="/pricing" class="hover:text-black">Pricing</a></li>
+          <li><a href="/blog" class="hover:text-black">Blog</a></li>
+          <li><a href="/contact" class="hover:text-black">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 2 -->
+      <div class="text-sm">
+        <p class="font-medium mb-4">Features</p>
+        <ul class="space-y-3 text-gray-600">
+          <li><a href="/features" class="hover:text-black">Features</a></li>
+          <li><a href="/how-it-works" class="hover:text-black">How it works</a></li>
+          <li><a href="/testimonials" class="hover:text-black">Testimonials</a></li>
+          <li><a href="/faq" class="hover:text-black">FAQ</a></li>
+          <li><a href="/pricing" class="hover:text-black">Pricing</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3 -->
+      <div class="text-sm">
+        <p class="font-medium mb-4">Company</p>
+        <ul class="space-y-3 text-gray-600">
+          <li><a href="/about" class="hover:text-black">About</a></li>
+          <li><a href="/blog" class="hover:text-black">Blog</a></li>
+          <li><a href="/contact" class="hover:text-black">Contact</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-gray-300 mb-6"></div>
+
+    <!-- Bottom Bar -->
+    <div class="flex flex-col md:flex-row items-center justify-between text-sm text-gray-600 gap-4">
+      <p>© 2025 TaskFlow. All rights reserved.</p>
+
+      <div class="flex items-center gap-6">
+        <a href="/privacy" class="hover:text-black">Privacy Policy</a>
+        <a href="/terms" class="hover:text-black">Terms of Service</a>
+        <a href="/cookies" class="hover:text-black">Cookies Settings</a>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    <!-- ================= SCRIPTS ================= -->
+    <script>
+      const menuBtn = document.getElementById("menuBtn");
+      const overlay = document.getElementById("mobileOverlay");
+      const backdrop = document.getElementById("backdrop");
+      const body = document.body;
+    
+      menuBtn.addEventListener("click", () => {
+        overlay.classList.remove("hidden");
+        body.classList.add("overflow-hidden");
+      });
+    
+      backdrop.addEventListener("click", () => {
+        overlay.classList.add("hidden");
+        body.classList.remove("overflow-hidden");
+      });
+    </script>
+
+
+
+</body>
+</html>
+

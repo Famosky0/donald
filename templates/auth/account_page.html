@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acount Setting</title>
+    <script src="{{ url_for('static', filename='js/core/theme.js') }}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white dark:bg-[#21201F] h-screen text-white flex flex-col">
+
+    <!-- HEADER -->
+    <header class="h-16 flex items-center justify-between px-6 border-b border-gray-700">
+  
+      <!-- LEFT: LOGO -->
+      <a href="/home" class="flex items-center gap-2">
+        <img src="{{ url_for('static', filename='images/logo.png') }}"
+             class="w-8 h-8 rounded-full">
+        <span class="text-sm font-semibold">TaskFlow</span>
+      </a>
+  
+      <!-- CENTER: SEARCH -->
+      
+      <!-- RIGHT: ACTIONS + USER -->
+      <div class="flex items-center gap-4">
+        <input
+        type="text"
+        placeholder="Search..."
+        class="px-3 py-1.5 w-64 rounded-md bg-[#2c2c2c] text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400"
+      />
+  
+      <div class="relative">
+        <!-- TRIGGER -->
+        <button
+          onclick="toggleUserMenu()"
+          class="flex items-center gap-2 px-2 py-1 rounded-md
+                 hover:bg-[#2c2c2c] transition select-none"
+        >
+          <img
+            src="{{ url_for('static', filename='uploads/' + profile_image) }}"
+            class="w-9 h-9 rounded-full object-cover border border-gray-600"
+          >
+      
+          <span class="text-xs font-medium text-white/90">
+            {{ name }}
+          </span>
+      
+          <!-- CHEVRON -->
+          <svg
+            class="w-4 h-4 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      
+        <!-- DROPDOWN -->
+        <div
+          id="userMenu"
+          class="absolute right-0 mt-2 w-44 bg-[#1f1f1f]
+                 border border-gray-700 rounded-lg shadow-lg
+                 hidden z-50"
+        >
+      
+          <!-- SETTINGS -->
+          <a
+            href="/account"
+            class="block px-4 py-2 text-sm text-white
+                   hover:bg-[#2c2c2c]"
+          >
+            Settings
+          </a>
+      
+          <!-- CHANGE PHOTO -->
+          <label
+            class="block px-4 py-2 text-sm text-white
+                   hover:bg-[#2c2c2c] cursor-pointer"
+          >
+            Change photo
+            <input
+              type="file"
+              name="profile_image"
+              class="hidden"
+              accept="image/*"
+              onchange="uploadProfileImage(this)"
+            >
+          </label>
+          
+          <!-- DIVIDER -->
+           <div class="border-t border-gray-700 my-1"></div>
+           
+           <!-- LOG OUT -->
+            <a
+            href="/logout"
+            class="block px-4 py-2 text-sm text-red-400
+             hover:bg-[#2c2c2c] hover:text-red-300"
+             >Log out
+            </a>
+          </div>
+      </div>
+  
+      </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+      
+        <!-- CONTENT -->
+        <main class="flex-1 flex items-center justify-center p-6">
+            <!-- SETTINGS CONTAINER -->
+             <div class="w-full max-w-screen-3xl min-h-[calc(100vh-120px)]
+             bg-white dark:bg-[#21201F] rounded-2xl
+             border border-gray-700
+             flex overflow-hidden">
+
+            <!-- LEFT SETTINGS NAV -->
+            <aside class="w-56 bg-[#2c2c2c] p-4 space-y-1">
+
+                <button onclick="showSection('account', this)"
+                  class="nav-btn w-full text-left px-3 py-2 rounded-md text-sm bg-[#3a3a3a] text-white">
+                  Account
+                </button>
+
+                <button onclick="showSection('security', this)"
+                  class="nav-btn w-full text-left px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#3a3a3a]">
+                  Security
+                </button>
+              
+                <button onclick="showSection('appearance', this)"
+                  class="nav-btn w-full text-left px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#3a3a3a]">
+                  Appearance
+                  
+                </button>
+              
+                <button onclick="showSection('notifications', this)"
+                  class="nav-btn w-full text-left px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#3a3a3a]">
+                  Notifications
+                </button>
+              
+                <button onclick="showSection('billing', this)"
+                  class="nav-btn w-full text-left px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#3a3a3a]">
+                  Billing
+                </button>
+              
+                <button onclick="showSection('subscription', this)"
+                  class="nav-btn w-full text-left px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#3a3a3a]">
+                  Subscription
+                </button>
+              
+                <div class="border-t border-gray-600 my-2"></div>
+              
+                <a href="/logout"
+                   class="block px-3 py-2 text-sm text-red-400 hover:bg-[#3a3a3a] rounded-md">
+                  Log out
+                </a>   
+            </aside>
+                  
+            <section class="flex-1 p-6">
+                <!--ACCOUNT SECTION-->
+                <div id="account" class="settings-section">
+                    <h1 class="text-2xl font-semibold mb-6">Account Information</h1>
+                  
+                    <div class="space-y-4">
+                      <div>
+                        <p class="text-sm text-gray-400">Full Name</p>
+                        <p class="text-lg">{{ full_name }}</p>
+                      </div>
+                  
+                      <div>
+                        <p class="text-sm text-gray-400">Username</p>
+                        <p class="text-lg">@{{ username }}</p>
+                      </div>
+                  
+                      <div>
+                        <p class="text-sm text-gray-400">Email</p>
+                        <p class="text-lg">{{ email }}</p>
+                      </div>
+                    </div>
+                </div>
+
+
+                <div id="security" class="settings-section hidden">
+                    <h1 class="text-2xl font-semibold mb-6">Security</h1>
+                  </div>
+                
+                  <div id="appearance" class="settings-section hidden">
+                    <h1 class="text-2xl font-semibold mb-6">Appearance</h1>
+                  
+                    <div class="space-y-6 max-w-md">
+                  
+                      <p class="text-sm text-gray-500 dark:text-gray-400">
+                        Choose how TaskFlow looks on your device.
+                      </p>
+                  
+                      <div class="space-y-3">
+                  
+                        <!-- SYSTEM -->
+                        <label
+                          class="group flex items-center justify-between p-4 rounded-lg border cursor-pointer
+                                 bg-white border-gray-200
+                                 hover:bg-gray-100
+                                 dark:bg-[#1f1f1f] dark:border-gray-700 dark:hover:bg-[#2c2c2c]">
+                  
+                          <div>
+                            <p class="font-medium text-gray-900 dark:text-white">
+                              Use system setting
+                            </p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                              Match your device appearance
+                            </p>
+                          </div>
+                  
+                          <input
+                            type="radio"
+                            name="theme"
+                            value="system"
+                            class="h-4 w-4 accent-black dark:accent-white"
+                          >
+                        </label>
+                  
+                        <!-- LIGHT -->
+                        <label
+                          class="group flex items-center justify-between p-4 rounded-lg border cursor-pointer
+                                 bg-white border-gray-200
+                                 hover:bg-gray-100
+                                 dark:bg-[#1f1f1f] dark:border-gray-700 dark:hover:bg-[#2c2c2c]">
+                  
+                          <div>
+                            <p class="font-medium text-gray-900 dark:text-white">
+                              Light
+                            </p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                              Always use light mode
+                            </p>
+                          </div>
+                  
+                          <input
+                            type="radio"
+                            name="theme"
+                            value="light"
+                            class="h-4 w-4 accent-black dark:accent-white"
+                          >
+                        </label>
+                  
+                        <!-- DARK -->
+                        <label
+                          class="group flex items-center justify-between p-4 rounded-lg border cursor-pointer
+                                 bg-white border-gray-200
+                                 hover:bg-gray-100
+                                 dark:bg-[#1f1f1f] dark:border-gray-700 dark:hover:bg-[#2c2c2c]">
+                  
+                          <div>
+                            <p class="font-medium text-gray-900 dark:text-white">
+                              Dark
+                            </p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                              Always use dark mode
+                            </p>
+                          </div>
+                  
+                          <input
+                            type="radio"
+                            name="theme"
+                            value="dark"
+                            class="h-4 w-4 accent-black dark:accent-white"
+                          >
+                        </label>
+                  
+                      </div>
+                    </div>
+                  </div>
+                    
+                    </div>
+                </div>
+
+                <div id="notifications" class="settings-section hidden">
+                    <h1 class="text-2xl font-semibold mb-6">Notifications</h1>
+                    <p class="text-gray-400">No new notifications.</p>
+                </div>
+                                
+                <!-- BILLING -->
+                 <div id="billing" class="settings-section hidden">
+                    <h1 class="text-2xl font-semibold mb-6">Billing</h1>
+                    <p class="text-gray-400">Payment methods go here.</p>
+                </div>
+
+                <!-- SUBSCRIPTION -->
+                <div id="subscription" class="settings-section hidden">
+                    <h1 class="text-2xl font-semibold mb-6">Subscription</h1>
+                    <p class="text-gray-400">No active subscription.</p>
+                </div>              
+            </section>
+        </main> 
+    </div>
+
+
+      <script>
+        function showSection(id, btn) {
+          document.querySelectorAll(".settings-section").forEach(section => {
+            section.classList.add("hidden");
+          });
+      
+          document.getElementById(id).classList.remove("hidden");
+      
+          document.querySelectorAll(".nav-btn").forEach(b => {
+            b.classList.remove("bg-[#3a3a3a]", "text-white");
+            b.classList.add("text-gray-300");
+          });
+      
+          btn.classList.add("bg-[#3a3a3a]", "text-white");
+          btn.classList.remove("text-gray-300");
+        }
+      
+        function toggleUserMenu() {
+          document.getElementById("userMenu").classList.toggle("hidden");
+        }
+      
+        document.addEventListener("click", function (e) {
+          const menu = document.getElementById("userMenu");
+          if (!e.target.closest(".relative")) {
+            menu.classList.add("hidden");
+          }
+        });
+      
+        function uploadProfileImage(input) {
+          const file = input.files[0];
+          if (!file) return;
+      
+          const formData = new FormData();
+          formData.append("profile_image", file);
+      
+          fetch("/upload_profile", {
+            method: "POST",
+            body: formData
+          }).then(() => location.reload());
+        }
+      </script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.ThemeManager) {
+      window.ThemeManager.syncThemeInputs(document);
+    }
+  });
+</script>
+    
+</body>
+</html>

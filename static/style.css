@@ -1,0 +1,35 @@
+/* Layout sanity */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+
+}
+
+.scrollbar-hide {
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+html.scrollbar-hide,
+body.scrollbar-hide {
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html.scrollbar-hide::-webkit-scrollbar,
+body.scrollbar-hide::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
